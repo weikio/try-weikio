@@ -24,7 +24,7 @@ code try-weikio
 Then run **Dev Containers: Reopen in Container**. The first time, the image is built, which takes a few minutes. Setting up the platform then takes less than a minute, and the terminal shows:
 
 ```
-Weik.io 2026.2.1 is running in this container.
+Weik.io 2026.2.2 is running in this container.
 
 Admin UI:  http://localhost:8580 (Chrome, Edge or Firefox)
 Admin:     admin@local, who signs in with a password

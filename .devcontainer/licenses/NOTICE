@@ -4,11 +4,12 @@ Copyright 2023-2027 Adafy Oy
 Weik.io is licensed under the Apache License, Version 2.0, in the file LICENSE.
 Source: https://github.com/weikio
 
-The container images weikio/weikio-backend, weikio/weikio-apim, weikio/weikio-agent and weikio/weikio-forwarder hold
-this file as /NOTICE and the file LICENSE as /LICENSE. They also contain software written by others, each under its own
-licence. /THIRD-PARTY-NOTICES.txt in each image lists every component of others that image contains: the NuGet packages
-its programs are built from, its base image's packages and, where the image holds them, the npm packages of the admin
-UI, the Java runtime, the libraries inside each Camel launcher and the Go modules rclone and the OpenTelemetry collector
+The container images weikio/weikio-backend, weikio/weikio-apim, weikio/weikio-agent, weikio/weikio-forwarder,
+weikio/weikio-logstore, weikio/weikio-metricstore and weikio/weikio-tracestore hold this file as /NOTICE and the file
+LICENSE as /LICENSE. They also contain software written by others, each under its own licence. /THIRD-PARTY-NOTICES.txt
+in each image lists every component of others that image contains: the NuGet packages its programs are built from, its
+base image's packages and, where the image holds them, the npm packages of the admin UI, the Java runtime, the libraries
+inside each Camel launcher and the Go modules rclone, the OpenTelemetry collector and the log, metric and trace stores
 are built from. Each entry names the component's licence and copies the licence and notice files the component ships in
 full, and the end of the file holds the standard text of every licence an entry names. /licenses/components.tsv in each
 image lists the same components, one per line, and /licenses/ in the weikio-backend and weikio-agent images also holds
@@ -44,6 +45,11 @@ the Mozilla Public License 2.0. The source code of each module is published at t
 /THIRD-PARTY-NOTICES.txt names, and the entry of each gives its address. The collector's own source code is published
 at https://github.com/open-telemetry/opentelemetry-collector-contrib under the tag of the version
 /THIRD-PARTY-NOTICES.txt names.
+
+The VictoriaLogs, VictoriaMetrics and VictoriaTraces programs in weikio-logstore, weikio-metricstore and
+weikio-tracestore are built from Go modules. The source code of each module is published at the Go module proxy under
+the version /THIRD-PARTY-NOTICES.txt names, and the entry of each gives its address. The programs' own source code is
+published under https://github.com/VictoriaMetrics under the tag of the version /THIRD-PARTY-NOTICES.txt names.
 
 The Try Weik.io image that this repository's Dockerfile builds holds this file, LICENSE and the same lists of
 everything it holds: what the weikio-backend image it is built from holds, the programs of the weikio-agent and

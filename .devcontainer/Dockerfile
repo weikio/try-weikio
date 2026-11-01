@@ -4,11 +4,11 @@
 # context, so the image needs nothing else from this repository.
 
 # --- the release --------------------------------------------------------------------------------------------------
-ARG WEIKIO_VERSION=2026.2.1
-ARG WEIKIO_CLI_SHA256=24f950e6cbab170e73c68530a4ac5770d2760346f89f77bfa3a326930ca4b999
-ARG BACKEND_IMAGE=docker.io/weikio/weikio-backend:2026.2.1@sha256:3f8effa15befcf6e892910dfde434876a7b2fcad62712a115b607d16863b268a
-ARG AGENT_IMAGE=docker.io/weikio/weikio-agent:2026.2.1@sha256:eafe64a7f41442b648757ab0408ccef05a4357cd0c263106a16e5741c201bae7
-ARG APIM_IMAGE=docker.io/weikio/weikio-apim:2026.2.1@sha256:84530db566b66acbad8229d5cfd5dc6ebb50fa858b380380e7143e9fcf58d4a5
+ARG WEIKIO_VERSION=2026.2.2
+ARG WEIKIO_CLI_SHA256=b01fa08d5c5c089ea159cdc4f395e4807109adad7e59cc21728c1a1ddbf78a10
+ARG BACKEND_IMAGE=docker.io/weikio/weikio-backend:2026.2.2@sha256:8a72a1831426761898589d73f236f7efb8bf110be313d03d09779d7410a91eb9
+ARG AGENT_IMAGE=docker.io/weikio/weikio-agent:2026.2.2@sha256:e5c09351e39c1aa766166d2c4f9eb0dd005dc74aa99ca3e71d477c31974d01c8
+ARG APIM_IMAGE=docker.io/weikio/weikio-apim:2026.2.2@sha256:d8b7855a8c888a1f92f3931d0a60dcb3e0147d9696fa0e48cd5cd39b35168725
 ARG NATS_IMAGE=docker.io/library/nats:2.14.7-alpine3.22@sha256:4063edae0717ba5f7501bfde75f97fd9b57f5b93597b92c70b6a6fbbf6a74e06
 ARG VICTORIA_LOGS_IMAGE=docker.io/victoriametrics/victoria-logs:v1.52.0@sha256:47b820890d64c4575a2a0a46415dcd8a4fd59a0f1fcd6a377693d7aea639442e
 ARG VICTORIA_METRICS_IMAGE=docker.io/victoriametrics/victoria-metrics:v1.153.0@sha256:5eff7af5341e401471002f58d106d399e614a62f3d240f2dbc21901e49eed5dd

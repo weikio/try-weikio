@@ -282,13 +282,13 @@ start_hub() {
 start_stores() {
     step "starting: log, metric and trace stores"
     supervise log-store victoria-logs -httpListenAddr=127.0.0.1:9428 -storageDataPath="$D/stores/logs" \
-        -retentionPeriod=30d -retention.maxDiskSpaceUsageBytes=0 -memory.allowedPercent=10
+        -retentionPeriod=30d -retention.maxDiskSpaceUsageBytes=0 -memory.allowedPercent=10 -delete.enable
     supervise metric-store victoria-metrics -httpListenAddr=127.0.0.1:8428 -storageDataPath="$D/stores/metrics" \
         -retentionPeriod=90d -opentelemetry.usePrometheusNaming -opentelemetry.promoteAllResourceAttributes=false \
         -opentelemetry.promoteResourceAttributes=service.name,service.version,service.instance.id,deployment.environment.name,weikio.environment.uid,weikio.project.name,weikio.agent.id,weikio.installation,weikio.ingest.sender,weikio.hub.server \
         -storage.maxHourlySeries=300000 -storage.maxDailySeries=1500000 -search.maxQueryDuration=30s -dedup.minScrapeInterval=1ms -memory.allowedPercent=10
     supervise trace-store victoria-traces -httpListenAddr=127.0.0.1:10428 -storageDataPath="$D/stores/traces" \
-        -retentionPeriod=7d -retention.maxDiskSpaceUsageBytes=2147483648 -memory.allowedPercent=10
+        -retentionPeriod=7d -retention.maxDiskSpaceUsageBytes=2147483648 -memory.allowedPercent=10 -delete.enable
     wait_until 60 http_ok http://127.0.0.1:9428/health || { fail "the log store did not start" log-store; return 1; }
     wait_until 60 http_ok http://127.0.0.1:8428/health || { fail "the metric store did not start" metric-store; return 1; }
     wait_until 60 http_ok http://127.0.0.1:10428/health || { fail "the trace store did not start" trace-store; return 1; }
