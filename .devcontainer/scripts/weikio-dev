@@ -1,0 +1,265 @@
+#!/usr/bin/env bash
+# The Try Weik.io container's helper: follows the platform's start, signs the weikio client in, and shows, reads and
+# resets the platform that runs in this container.
+set -uo pipefail
+
+D="${WEIKIO_DEV_DATA:-/home/weikio/.weikio-dev}"
+STATE="$D/state"
+RUN="$D/run"
+LOGS="$D/logs"
+SECRETS="$D/secrets"
+BASE_URL=http://localhost:8580
+PROCESSES=(hub log-store metric-store trace-store backend apim leaf agent)
+. /usr/local/share/weikio-dev/release
+
+usage() {
+    cat <<'EOF'
+Usage: weikio-dev <command>
+
+  wait [--login] [--timeout 20m]  follow the start until the platform is ready, then show the welcome
+                                  (--login also signs the Weik.io CLI in)
+  login                           sign the Weik.io CLI in as the platform admin
+  status                          each process of the platform: up or down, restarts, health check
+  logs [<process>] [-f]           a process's log, or the list of logs
+  ui-link                         a one-time link that sets the admin's password for the admin UI
+  reset [--yes]                   remove the installation and set up a new one, losing every integration
+  welcome                         show the welcome again
+EOF
+}
+
+step() { cat "$STATE/step" 2>/dev/null || echo "not started"; }
+
+# An error or a warning on standard error: its sentence after the label, then each fix as a lead-in and a command under
+# it, indented as the weikio client indents them.
+problem() {
+    local label="$1" sentence="$2" indent
+    shift 2
+    indent="$(printf '%*s' "$(( ${#label} + 2 ))" '')"
+    printf '%s: %s\n' "$label" "$sentence" >&2
+    while [ $# -ge 2 ]; do
+        printf '%s%s\n%s  %s\n' "$indent" "$1" "$indent" "$2" >&2
+        shift 2
+    done
+}
+
+seconds_of() {
+    local value="$1"
+    case "$value" in
+        *m) echo $(( ${value%m} * 60 )) ;;
+        *s) echo "${value%s}" ;;
+        *h) echo $(( ${value%h} * 3600 )) ;;
+        *) echo "$value" ;;
+    esac
+}
+
+welcome() {
+    echo
+    # On a terminal the client draws its robot head waking up, and the welcome's lines follow it. Elsewhere it prints nothing.
+    weikio version --welcome
+    cat <<EOF
+Weik.io $WEIKIO_VERSION is running in this container.
+
+Admin UI:  http://localhost:8580 (Chrome, Edge or Firefox)
+Admin:     admin@local, who signs in with a password
+CLI:       signed in as the platform admin, in project sandbox and environment devtest
+
+Before the first sign-in, choose the admin's password with the one-time link this prints:
+  weikio-dev ui-link
+
+The address on your machine must be localhost:8580. If your editor's Ports view shows another port, something else
+uses 8580, so stop it and reopen the container. The devcontainer command line forwards no port. Run this on your
+machine for that, in the folder you started the container from:
+  node .devcontainer/forward-admin-ui.js
+
+Try:
+  weikio init hello             create an integration in ./hello that logs a line every 5 s
+  weikio run hello              publish it, deploy it to devtest and follow its logs (Ctrl-C stops)
+  weikio status sandbox/hello   where it runs and in what state
+  weikio logs sandbox/hello     its log lines
+  weikio dev run hello          run it here with Camel, with devtest's values
+
+More help:
+  weikio --help
+  weikio-dev --help
+
+EOF
+}
+
+login() {
+    local key
+    key="$(sed -n 's/^WEIKIO_DEV_ADMIN_KEY=//p' "$SECRETS/admin.env" 2>/dev/null)"
+    if [ -z "$key" ]; then
+        problem error "The platform has no admin key yet, because it is still being set up." "Follow its start with:" "weikio-dev wait"
+        return 1
+    fi
+    # The key is handed to the client in its environment, never on a command line.
+    (
+        flock 8
+        WEIKIO_API_KEY="$key" weikio login "$BASE_URL" --name local --project sandbox --env devtest > "$RUN/login.out" 2>&1
+    ) 8> "$RUN/login.lock"
+    local rc=$?
+    if [ "$rc" != 0 ]; then
+        problem error "The Weik.io CLI could not sign in to $BASE_URL. The CLI said:"
+        sed 's/^/       /' "$RUN/login.out" >&2
+        return "$rc"
+    fi
+    echo "The Weik.io CLI is signed in to $BASE_URL as the platform admin, in context local."
+}
+
+# Warns when the client was compiled from another release than the platform's.
+version_check() {
+    local client server lines
+    lines="$(weikio version 2>/dev/null)"
+    client="$(sed -n '1s/^weikio \([^ ]*\).*/\1/p' <<< "$lines")"
+    server="$(sed -n 's/^server [^ ]* \([^ ]*\).*/\1/p' <<< "$lines")"
+    if [ -n "$client" ] && [ -n "$server" ] && [ "$client" != "$server" ]; then
+        problem warning "The Weik.io CLI is $client and the platform is $server, so some commands may not work." \
+            "Rebuild the container from the current files of this repository with:" "Dev Containers: Rebuild Container"
+    fi
+}
+
+wait_ready() {
+    local do_login=0 timeout=1200 last="" now
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --login) do_login=1; shift ;;
+            --timeout) timeout="$(seconds_of "${2-}")"; shift 2 ;;
+            *) usage >&2; return 2 ;;
+        esac
+    done
+    local started=$SECONDS
+    while :; do
+        now="$(step)"
+        if [ "$now" != "$last" ]; then
+            printf 'Weik.io: %s\n' "$now"
+            last="$now"
+        fi
+        if [ -f "$STATE/ready" ]; then
+            break
+        fi
+        if [ -f "$STATE/failed" ]; then
+            problem error "The platform did not start: $(cat "$STATE/failed")." "List its logs with:" "weikio-dev logs" \
+                "Start from a new installation with:" "weikio-dev reset"
+            return 1
+        fi
+        if (( SECONDS - started >= timeout )); then
+            problem error "The platform is not ready after $(( timeout / 60 )) minutes. It is at this step: $now." \
+                "It keeps starting. Follow it with:" "weikio-dev wait" "See every process with:" "weikio-dev status"
+            return 1
+        fi
+        sleep 2
+    done
+    if [ "$do_login" = 1 ]; then
+        login || return 1
+        version_check
+    fi
+    welcome
+}
+
+process_check() {
+    case "$1" in
+        hub) curl -fsS -o /dev/null --max-time 3 "http://127.0.0.1:8222/healthz?js-enabled-only=true" ;;
+        log-store) curl -fsS -o /dev/null --max-time 3 http://127.0.0.1:9428/health ;;
+        metric-store) curl -fsS -o /dev/null --max-time 3 http://127.0.0.1:8428/health ;;
+        trace-store) curl -fsS -o /dev/null --max-time 3 http://127.0.0.1:10428/health ;;
+        backend) curl -fsS -o /dev/null --max-time 3 http://127.0.0.1:8580/readyz ;;
+        apim) curl -fsS -o /dev/null --max-time 3 http://127.0.0.1:8581/healthz ;;
+        leaf) curl -fsS --max-time 3 http://127.0.0.1:8222/leafz 2>/dev/null | grep -q weikio-leaf ;;
+        agent) curl -fsS -o /dev/null --max-time 3 http://127.0.0.1:6006/readyz ;;
+    esac
+}
+
+status() {
+    local state="starting"
+    [ -f "$STATE/ready" ] && state="ready"
+    [ -f "$STATE/failed" ] && state="failed"
+    # The step in brackets is the one it is at while it starts, or the one it failed at. Once ready there is none to name.
+    local at=""
+    [ "$state" = ready ] || at=" ($(step))"
+    echo "Weik.io $WEIKIO_VERSION: $state$at, started $(cat "$RUN/started-at" 2>/dev/null || echo -)"
+    printf '  %-13s %-5s %-8s %-8s %s\n' PROCESS STATE PID RESTARTS CHECK
+    local name pid up check restarts all_up=0
+    for name in "${PROCESSES[@]}"; do
+        pid="$(cat "$RUN/$name.pid" 2>/dev/null || true)"
+        up=down
+        [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null && up=up
+        [ "$up" = up ] || all_up=1
+        check=failed
+        process_check "$name" 2>/dev/null && check=ok
+        [ "$check" = ok ] || all_up=1
+        restarts="$(cat "$RUN/$name.restarts" 2>/dev/null || echo 0)"
+        printf '  %-13s %-5s %-8s %-8s %s\n' "$name" "$up" "${pid:--}" "$restarts" "$check"
+    done
+    echo "  admin UI and API: $BASE_URL"
+    echo "  CLI: $(weikio version 2>/dev/null | head -n 1)"
+    return "$all_up"
+}
+
+logs() {
+    local name="${1-}" follow=0
+    if [ "${2-}" = "-f" ] || [ "${1-}" = "-f" ]; then follow=1; fi
+    [ "$name" = "-f" ] && name="${2-}"
+    if [ -z "$name" ]; then
+        echo "Logs in $LOGS:"
+        ls -1 "$LOGS" 2>/dev/null | sed -n 's/\.log$//p' | sed 's/^/  /'
+        echo
+        echo "Read one with:"
+        echo "  weikio-dev logs <name> [-f]"
+        return 0
+    fi
+    local file="$LOGS/$name.log"
+    [ -f "$file" ] || { problem error "There is no log named '$name'." "List the logs with:" "weikio-dev logs"; return 2; }
+    if [ "$follow" = 1 ]; then
+        tail -n 100 -f "$file"
+    else
+        tail -n 200 "$file"
+    fi
+}
+
+ui_link() {
+    [ -f "$STATE/ready" ] || { problem error "The platform is not ready yet." "Follow its start with:" "weikio-dev wait"; return 1; }
+    local out
+    if ! out="$(weikio user reset-password admin@local --context local 2>&1)"; then
+        login > /dev/null || return 1
+        out="$(weikio user reset-password admin@local --context local 2>&1)" || { echo "$out" >&2; return 1; }
+    fi
+    echo "Open the link below in your browser (Chrome, Edge or Firefox) on the machine where your editor runs, and choose"
+    echo "the password of admin@local. That signs you in, and later you sign in at $BASE_URL with that password."
+    echo
+    echo "The link works once. For a new one, run:"
+    echo "  weikio-dev ui-link"
+    echo
+    echo "$out"
+}
+
+reset() {
+    if [ "${1-}" != "--yes" ]; then
+        echo "This removes the installation in this container: every integration, deployment, log line and key."
+        printf 'Continue? [y/N] '
+        local reply
+        read -r reply
+        case "$reply" in y|Y|yes|YES) ;; *) echo "Nothing was removed."; return 1 ;; esac
+    fi
+    local pid
+    pid="$(cat "$RUN/platform.pid" 2>/dev/null || true)"
+    [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null || { problem error "The platform's start script is not running. Restart the container."; return 1; }
+    rm -f "$STATE/ready"
+    kill -USR1 "$pid"
+    echo "Resetting. The platform stops, its data is removed and a new installation is set up."
+    sleep 3
+    wait_ready --login
+}
+
+command="${1-}"
+[ $# -gt 0 ] && shift
+case "$command" in
+    wait) wait_ready "$@" ;;
+    login) login ;;
+    status) status ;;
+    logs) logs "$@" ;;
+    ui-link) ui_link ;;
+    reset) reset "$@" ;;
+    welcome) welcome ;;
+    ""|-h|--help|help) usage ;;
+    *) usage >&2; exit 2 ;;
+esac

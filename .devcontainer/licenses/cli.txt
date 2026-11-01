@@ -1,0 +1,13 @@
+NuGet packages
+==============
+
+System.CommandLine 2.0.0
+  Licence: MIT, whose text is at the end of this file
+  Copyright: (c) Microsoft Corporation. All rights reserved.
+  Project: https://github.com/dotnet/command-line-api
+
+YamlDotNet 16.3.0
+  Licence: MIT, whose text is at the end of this file
+  Copyright: Copyright (c) Antoine Aubry and contributors
+  Project: https://github.com/aaubry/YamlDotNet/wiki
+

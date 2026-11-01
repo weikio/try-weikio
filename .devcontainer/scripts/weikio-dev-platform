@@ -1,0 +1,404 @@
+#!/usr/bin/env bash
+# The Try Weik.io container's entry point. On the first start it sets the installation up, in the order a compose stack
+# of the dev profile does it. On every start it starts the platform's processes, restarts any that exits, and stops them
+# in order when the container stops. Everything listens on 127.0.0.1 inside the container. The admin UI and the API are
+# http://localhost:8580, which the editor forwards to the same address on the developer's machine.
+#
+# Its own lines go to the container's log. Each process writes to $WEIKIO_DEV_DATA/logs/<name>.log. The values init
+# shows once (the operator seed, the platform-admin API key and the set-password link) are kept in
+# $WEIKIO_DEV_DATA/secrets, readable by the developer's user alone, and are never written to a log.
+set -uo pipefail
+
+D="${WEIKIO_DEV_DATA:-/home/weikio/.weikio-dev}"
+DEV_USER=weikio
+
+# As root: give the data volume to the developer's user, whose uid the editor may have changed since the volume was
+# made, then run as that user.
+if [ "$(id -u)" = 0 ]; then
+    uid="$(id -u "$DEV_USER")"
+    gid="$(id -g "$DEV_USER")"
+    mkdir -p "$D"
+    if [ "$(stat -c %u "$D")" != "$uid" ] || [ -n "$(find "$D" -maxdepth 3 ! -user "$uid" -print -quit 2>/dev/null)" ]; then
+        echo "weikio-dev: giving the data volume $D to $DEV_USER (uid $uid)"
+        chown -R "$uid:$gid" "$D"
+    fi
+    exec setpriv --reuid="$uid" --regid="$gid" --init-groups \
+        env HOME="/home/$DEV_USER" USER="$DEV_USER" LOGNAME="$DEV_USER" "$0" "$@"
+fi
+
+umask 077
+. /usr/local/share/weikio-dev/release
+stopping=0
+reset_requested=0
+trap 'stopping=1' TERM INT
+trap 'reset_requested=1' USR1
+
+BASE_URL=http://localhost:8580
+STACK="$D/home/deploy/compose/dev"
+BUNDLE="$STACK/agent"
+STATE="$D/state"
+RUN="$D/run"
+LOGS="$D/logs"
+SECRETS="$D/secrets"
+HUB_MONITOR=http://127.0.0.1:8222
+INIT_FLAGS=(--dev --public-base-url "$BASE_URL" --hub-network-leaf-url nats://127.0.0.1:7422
+    --replicas 1 --disk-budget 32G --apim-instances 1)
+# The order processes stop in. They start in the reverse order.
+STOP_ORDER=(agent apim leaf backend trace-store metric-store log-store hub)
+
+say() { printf '%s weikio-dev: %s\n' "$(date -u +%H:%M:%S)" "$*"; }
+step() {
+    printf '%s\n' "$1" > "$STATE/step"
+    say "$1"
+}
+
+make_dirs() {
+    mkdir -p "$STATE" "$RUN" "$LOGS" "$SECRETS" "$D/hub" "$D/leaf" "$D/apim" "$D/m2" \
+        "$D/stores/logs" "$D/stores/metrics" "$D/stores/traces"
+    chmod 0700 "$D" "$SECRETS"
+}
+
+# One start script per container: it keeps the lock while it runs.
+mkdir -p "$D"
+exec 9>"$D/.platform.lock"
+if ! flock -n 9; then
+    say "the platform is already started by another start script in this container"
+    exit 1
+fi
+make_dirs
+rm -f "$RUN"/*.pid "$RUN"/*.restarts "$RUN/stopping" "$STATE/ready" "$STATE/failed"
+printf '%s\n' "$$" > "$RUN/platform.pid"
+date -u +%Y-%m-%dT%H:%M:%SZ > "$RUN/started-at"
+
+# --- helpers -------------------------------------------------------------------------------------------------------
+
+http_ok() { curl -fsS -o /dev/null --max-time 3 "$1" 2>/dev/null; }
+
+# Waits until the command succeeds, at most the given seconds.
+wait_until() {
+    local timeout="$1" started="$SECONDS"
+    shift
+    until "$@"; do
+        [ "$stopping" = 1 ] && return 1
+        (( SECONDS - started >= timeout )) && return 1
+        sleep 1
+    done
+}
+
+# Hides every value init shows once.
+mask() { sed -E 's/(\(shown once[^)]*\):).*/\1 [hidden; kept in the data volume]/'; }
+
+# Runs a weikio-backend verb with the installation's settings. Its whole output is kept in the secrets folder, and
+# the setup log gets it with the shown-once values hidden.
+run_verb() {
+    local label="$1" out rc
+    shift
+    out="$SECRETS/verb-$(date -u +%Y%m%dT%H%M%S)-$1.out"
+    env WEIKIO_HOME="$D/home" WEIKIO_MASTER_KEY_FILE="$D/master.key" Weikio__Keys__Dir="$D/keys" \
+        WEIKIO_BACKEND_IMAGE="$BACKEND_IMAGE" Weikio__Nats__Replicas=1 \
+        weikio-backend "$@" > "$out" 2>&1
+    rc=$?
+    { echo "== $label (exit $rc)"; mask < "$out"; } >> "$LOGS/setup.log"
+    return "$rc"
+}
+
+# Keeps a log from growing past 20 MB: the older half moves aside at start.
+rotate() {
+    local log="$LOGS/$1.log"
+    if [ -f "$log" ] && [ "$(stat -c %s "$log")" -gt 20971520 ]; then
+        mv -f "$log" "$log.1"
+    fi
+}
+
+# Starts one process and restarts it whenever it exits, until the platform stops.
+supervise() {
+    local name="$1"
+    shift
+    rotate "$name"
+    (
+        restarts=0
+        delay=2
+        while :; do
+            [ -e "$RUN/stopping" ] && exit 0
+            "$@" >> "$LOGS/$name.log" 2>&1 < /dev/null &
+            child=$!
+            printf '%s\n' "$child" > "$RUN/$name.pid"
+            started=$SECONDS
+            wait "$child"
+            rc=$?
+            [ -e "$RUN/stopping" ] && exit 0
+            restarts=$((restarts + 1))
+            printf '%s\n' "$restarts" > "$RUN/$name.restarts"
+            (( SECONDS - started > 60 )) && delay=2
+            say "$name exited with $rc; starting it again in ${delay}s (restart $restarts, log: weikio-dev logs $name)"
+            sleep "$delay"
+            delay=$(( delay * 2 > 30 ? 30 : delay * 2 ))
+        done
+    ) &
+    printf '%s\n' "$!" > "$RUN/$name.supervisor"
+}
+
+stop_one() {
+    local name="$1" grace="$2" pid
+    pid="$(cat "$RUN/$name.pid" 2>/dev/null)" || return 0
+    [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null || return 0
+    kill -TERM "$pid" 2>/dev/null
+    local waited=0
+    while kill -0 "$pid" 2>/dev/null && (( waited < grace )); do
+        sleep 1
+        waited=$((waited + 1))
+    done
+    kill -KILL "$pid" 2>/dev/null
+    say "$name stopped"
+}
+
+stop_all() {
+    touch "$RUN/stopping"
+    rm -f "$STATE/ready"
+    for name in "${STOP_ORDER[@]}"; do
+        case "$name" in
+            agent) stop_one "$name" 35 ;;
+            backend) stop_one "$name" 10 ;;
+            *) stop_one "$name" 5 ;;
+        esac
+    done
+    for name in "${STOP_ORDER[@]}"; do
+        kill "$(cat "$RUN/$name.supervisor" 2>/dev/null)" 2>/dev/null
+    done
+    rm -f "$RUN"/*.pid "$RUN"/*.supervisor
+}
+
+fail() {
+    # A start the container's stop interrupted has not failed.
+    [ "$stopping" = 1 ] && return 1
+    step "failed: $1"
+    printf '%s\n' "$1" > "$STATE/failed"
+    say "the platform is not ready. Read the log with: weikio-dev logs ${2:-setup}"
+    return 1
+}
+
+admin_key() { sed -n 's/^WEIKIO_DEV_ADMIN_KEY=//p' "$SECRETS/admin.env" 2>/dev/null; }
+
+api_get() {
+    curl -fsS --max-time 5 -H @"$SECRETS/api.header" "$BASE_URL$1" 2>/dev/null
+}
+
+# --- first start: the installation --------------------------------------------------------------------------------
+
+setup_keys() {
+    [ -f "$STATE/configured" ] && return 0
+    step "setting up: keys and configuration (first start)"
+    [ -s "$D/master.key" ] || head -c 32 /dev/urandom > "$D/master.key"
+    # The message server is not running yet, so init writes the keys and the configuration and no document.
+    run_verb "init, first phase" init "${INIT_FLAGS[@]}" --Weikio:Nats:Urls:0 nats://127.0.0.1:1
+    local rc=$?
+    # An earlier start that stopped half-way leaves an installation that init refuses to touch without its message
+    # server (exit 6), and its configuration is written already.
+    if [ "$rc" != 0 ] && ! { [ "$rc" = 6 ] && [ -f "$STACK/nats.conf" ]; }; then
+        fail "init could not write the installation's keys and configuration" setup
+        return 1
+    fi
+    [ -f "$STACK/nats.conf" ] || { fail "init wrote no nats.conf" setup; return 1; }
+    touch "$STATE/configured"
+}
+
+# The hub's configuration is init's, with its listeners on 127.0.0.1, its data in the volume and the WebSocket listener
+# (for sites behind a TLS terminator) left out.
+hub_conf() {
+    sed -e 's|^listen: 0\.0\.0\.0:4222$|listen: 127.0.0.1:4222|' \
+        -e 's|^\(  listen: \)0\.0\.0\.0:7422$|\1127.0.0.1:7422|' \
+        -e "s|\"/data/jetstream\"|\"$D/hub/jetstream\"|" \
+        -e "s|\"/data/jwt\"|\"$D/hub/jwt\"|" \
+        -e '/^websocket {/,/^}/d' \
+        "$STACK/nats.conf" > "$D/hub/nats.conf.new" || return 1
+    grep -q '^listen: 127.0.0.1:4222$' "$D/hub/nats.conf.new" \
+        && grep -q '^  listen: 127.0.0.1:7422$' "$D/hub/nats.conf.new" \
+        && ! grep -q -e '^websocket' -e '"/data/' -e '0\.0\.0\.0' "$D/hub/nats.conf.new" \
+        || { fail "init's nats.conf is not the shape this script rewrites" setup; return 1; }
+    mv -f "$D/hub/nats.conf.new" "$D/hub/nats.conf"
+    # The configuration includes the account tokens from keys/ beside it, which the platform keeps in the keys folder.
+    ln -sfn "$D/keys/nats" "$D/hub/keys"
+}
+
+# The site leaf's configuration is the configuration init wrote for the dev agent, listening on 127.0.0.1:4223 (the hub has 4222)
+# and reading the credential from the hub folder of the agent's home, where the agent rewrites it after a re-issue.
+leaf_conf() {
+    sed -e 's|^listen: 0\.0\.0\.0:4222$|listen: 127.0.0.1:4223|' \
+        -e "s|\"/etc/nats/agent.creds\"|\"$BUNDLE/hub/agent.creds\"|" \
+        "$STACK/leaf/leaf.conf" > "$D/leaf/leaf.conf.new" || return 1
+    grep -q '^listen: 127.0.0.1:4223$' "$D/leaf/leaf.conf.new" \
+        && grep -q "credentials: \"$BUNDLE/hub/agent.creds\"" "$D/leaf/leaf.conf.new" \
+        && ! grep -q -e '/etc/nats' -e '0\.0\.0\.0' "$D/leaf/leaf.conf.new" \
+        || { fail "the dev agent's leaf.conf is not the shape this script rewrites" setup; return 1; }
+    mv -f "$D/leaf/leaf.conf.new" "$D/leaf/leaf.conf"
+}
+
+setup_documents() {
+    [ -f "$STATE/initialised" ] && return 0
+    step "setting up: storage"
+    run_verb "infra apply" infra apply --Weikio:Nats:Urls:0 nats://127.0.0.1:4222 \
+        --Weikio:Nats:AdminCredsFile "$D/keys/infra-admin.creds" \
+        || { fail "infra apply could not create the installation's storage" setup; return 1; }
+
+    step "setting up: first documents, the admin, project sandbox, environment devtest and agent dev"
+    run_verb "init, document phase" init "${INIT_FLAGS[@]}" --Weikio:Nats:Urls:0 nats://127.0.0.1:4222 \
+        --Weikio:Nats:AdminCredsFile "$D/keys/infra-admin.creds" \
+        || { fail "init could not write the installation's first documents" setup; return 1; }
+
+    # The key and the link of the first run that showed them. A later run shows neither again.
+    local key link
+    key="$(cat "$SECRETS"/verb-*-init.out 2>/dev/null | sed -n 's/^first platform-admin API key (shown once):[[:space:]]*//p' | head -n 1)"
+    link="$(cat "$SECRETS"/verb-*-init.out 2>/dev/null | sed -n 's/^set-password link for [^ ]* (shown once):[[:space:]]*//p' | head -n 1)"
+    [ -n "$key" ] || { fail "init showed no platform-admin API key; start again from nothing with: weikio-dev reset" setup; return 1; }
+    printf 'WEIKIO_DEV_ADMIN_KEY=%s\nWEIKIO_DEV_FIRST_UI_LINK=%s\n' "$key" "$link" > "$SECRETS/admin.env"
+    printf 'Authorization: Bearer %s\n' "$key" > "$SECRETS/api.header"
+    [ -f "$STACK/leaf/leaf.conf" ] && [ -f "$BUNDLE/agent.env" ] \
+        || { fail "init wrote no bundle for the dev agent" setup; return 1; }
+    touch "$STATE/initialised"
+}
+
+# The sandbox's admin signs in to the admin UI with a password alone, so a local trial needs no authenticator app. The
+# two-factor requirement is turned off once per installation, so an admin who turns it on again keeps it on.
+setup_sign_in() {
+    [ -f "$STATE/two-factor-off" ] && return 0
+    step "setting up: password sign-in for the admin UI"
+    echo "== settings set --two-factor-required=false" >> "$LOGS/setup.log"
+    WEIKIO_SERVER="$BASE_URL" WEIKIO_API_KEY="$(admin_key)" XDG_CONFIG_HOME="$RUN/client-config" \
+        weikio settings set --two-factor-required=false --yes \
+        --reason "Try Weik.io container: the admin signs in with a password alone" >> "$LOGS/setup.log" 2>&1 < /dev/null \
+        || { fail "the admin UI's sign-in could not be set to a password alone" setup; return 1; }
+    touch "$STATE/two-factor-off"
+}
+
+# --- every start: the processes -----------------------------------------------------------------------------------
+
+start_hub() {
+    step "starting: message server"
+    hub_conf || return 1
+    supervise hub env GOMEMLIMIT=150MiB nats-server -c "$D/hub/nats.conf"
+    wait_until 60 http_ok "$HUB_MONITOR/healthz?js-enabled-only=true" || { fail "the message server did not start" hub; return 1; }
+}
+
+start_stores() {
+    step "starting: log, metric and trace stores"
+    supervise log-store victoria-logs -httpListenAddr=127.0.0.1:9428 -storageDataPath="$D/stores/logs" \
+        -retentionPeriod=30d -retention.maxDiskSpaceUsageBytes=0 -memory.allowedPercent=10
+    supervise metric-store victoria-metrics -httpListenAddr=127.0.0.1:8428 -storageDataPath="$D/stores/metrics" \
+        -retentionPeriod=90d -opentelemetry.usePrometheusNaming -opentelemetry.promoteAllResourceAttributes=false \
+        -opentelemetry.promoteResourceAttributes=service.name,service.version,service.instance.id,deployment.environment.name,weikio.environment.uid,weikio.project.name,weikio.agent.id,weikio.installation,weikio.ingest.sender,weikio.hub.server \
+        -storage.maxHourlySeries=300000 -storage.maxDailySeries=1500000 -search.maxQueryDuration=30s -dedup.minScrapeInterval=1ms -memory.allowedPercent=10
+    supervise trace-store victoria-traces -httpListenAddr=127.0.0.1:10428 -storageDataPath="$D/stores/traces" \
+        -retentionPeriod=7d -retention.maxDiskSpaceUsageBytes=2147483648 -memory.allowedPercent=10
+    wait_until 60 http_ok http://127.0.0.1:9428/health || { fail "the log store did not start" log-store; return 1; }
+    wait_until 60 http_ok http://127.0.0.1:8428/health || { fail "the metric store did not start" metric-store; return 1; }
+    wait_until 60 http_ok http://127.0.0.1:10428/health || { fail "the trace store did not start" trace-store; return 1; }
+}
+
+start_backend() {
+    step "starting: backend (API, admin UI and builder)"
+    local install_id
+    install_id="$(jq -r '.installationId // empty' "$STACK/weikio-install.json" 2>/dev/null)"
+    # Each .NET program runs in its own folder, where it reads its settings file and the backend its admin UI.
+    supervise backend env -C /app -u ASPNETCORE_HTTP_PORTS \
+        WEIKIO_HOME="$D/home" WEIKIO_MASTER_KEY_FILE="$D/master.key" Weikio__Keys__Dir="$D/keys" \
+        Weikio__Nats__Urls__0=nats://127.0.0.1:4222 \
+        Weikio__Nats__CredsFile="$D/keys/backend.creds" Weikio__Nats__SysCredsFile="$D/keys/sys-backend.creds" \
+        Weikio__Nats__Replicas=1 Weikio__Nats__HubNetworkLeafUrl=nats://127.0.0.1:7422 \
+        Weikio__Server__PublicBaseUrl="$BASE_URL" ${install_id:+Weikio__Install__Id="$install_id"} \
+        Weikio__Telemetry__IngestTokenFile="$D/keys/ingest-hub.token" \
+        OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:8580/otlp \
+        Weikio__Builder__M2Dir="$D/m2" \
+        Weikio__Logs__VictoriaLogsUrl=http://127.0.0.1:9428 \
+        Weikio__Metrics__VictoriaMetricsUrl=http://127.0.0.1:8428 Weikio__Metrics__Retention=90d \
+        Weikio__Traces__VictoriaTracesUrl=http://127.0.0.1:10428 Weikio__Traces__Retention=7d \
+        Weikio__Traces__MaxDiskSpaceUsageBytes=2147483648 \
+        DOTNET_gcServer=0 \
+        weikio-backend --urls http://127.0.0.1:8580
+    wait_until 180 http_ok http://127.0.0.1:8580/healthz || { fail "the backend did not start" backend; return 1; }
+}
+
+start_apim() {
+    step "starting: API gateway"
+    supervise apim env -C /opt/weikio/apim -u ASPNETCORE_HTTP_PORTS \
+        WEIKIO_HOME="$D/apim" WEIKIO_APIM_INSTANCE=1 Weikio__Keys__Dir="$D/keys" \
+        Weikio__Nats__Urls__0=nats://127.0.0.1:4222 \
+        Weikio__Telemetry__IngestTokenFile="$D/keys/ingest-hub.token" \
+        OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:8580/otlp \
+        DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true DOTNET_gcServer=0 \
+        ASPNETCORE_URLS=http://127.0.0.1:8581 \
+        /opt/weikio/apim/weikio-apim
+    wait_until 120 http_ok http://127.0.0.1:8581/healthz || { fail "the API gateway did not start" apim; return 1; }
+}
+
+start_leaf() {
+    step "starting: the agent's message server"
+    leaf_conf || return 1
+    supervise leaf env GOMEMLIMIT=64MiB nats-server -c "$D/leaf/leaf.conf"
+    leaf_linked() { curl -fsS --max-time 3 "$HUB_MONITOR/leafz" 2>/dev/null | grep -q weikio-leaf; }
+    wait_until 60 leaf_linked || { fail "the agent's message server did not link to the hub" leaf; return 1; }
+}
+
+# The agent reads its settings from the bundle init wrote, which holds its ingest token, so the file is read by the
+# agent's own shell and never printed.
+run_agent() {
+    set -a
+    . "$BUNDLE/agent.env"
+    set +a
+    exec env -C /opt/weikio/agent -u ASPNETCORE_HTTP_PORTS \
+        WEIKIO_HOME="$BUNDLE" Weikio__Nats__Urls__0=nats://127.0.0.1:4223 \
+        Weikio__Agent__NKeyFile="$BUNDLE/agent.nk" Weikio__Agent__Runtime__JavaHome=/opt/weikio/agent-java \
+        DOTNET_gcServer=0 \
+        /opt/weikio/agent/Weikio.Agent
+}
+
+start_agent() {
+    step "starting: agent dev"
+    supervise agent run_agent
+    wait_until 120 http_ok http://127.0.0.1:6006/readyz || { fail "the agent did not start" agent; return 1; }
+    step "waiting: agent dev online in environment devtest"
+    agent_online() { api_get /api/v1/environments/devtest | jq -e '(.status.agentsOnline // 0) > 0' > /dev/null 2>&1; }
+    wait_until 120 agent_online || { fail "agent dev did not come online in devtest" agent; return 1; }
+}
+
+bring_up() {
+    setup_keys || return 1
+    start_hub || return 1
+    start_stores || return 1
+    setup_documents || return 1
+    start_apim || return 1
+    start_backend || return 1
+    setup_sign_in || return 1
+    start_leaf || return 1
+    start_agent || return 1
+    printf 'version=%s\nready_at=%s\nstarted_at=%s\n' "$WEIKIO_VERSION" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+        "$(cat "$RUN/started-at")" > "$STATE/ready"
+    step "ready"
+    say "Weik.io $WEIKIO_VERSION is running: http://localhost:8580 (admin UI and API)"
+}
+
+# --- the container's life -----------------------------------------------------------------------------------------
+
+say "Weik.io $WEIKIO_VERSION, data in $D"
+bring_up || true
+while :; do
+    if [ "$stopping" = 1 ]; then
+        step "stopping"
+        stop_all
+        step "stopped"
+        exit 0
+    fi
+    if [ "$reset_requested" = 1 ]; then
+        reset_requested=0
+        step "resetting: stopping every process and removing the installation"
+        stop_all
+        find "$D" -mindepth 1 -maxdepth 1 ! -name .platform.lock -exec rm -rf {} +
+        make_dirs
+        rm -f "$RUN/stopping"
+        date -u +%Y-%m-%dT%H:%M:%SZ > "$RUN/started-at"
+        printf '%s\n' "$$" > "$RUN/platform.pid"
+        bring_up || true
+        continue
+    fi
+    sleep 5 &
+    wait $!
+done

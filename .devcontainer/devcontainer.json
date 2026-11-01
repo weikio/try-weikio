@@ -1,12 +1,41 @@
+// Try Weik.io: the whole Weik.io platform in this container, set up and running, so you only type weikio commands.
 {
-    "name": "Weik.io Integration Dev Container",
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "app",
-    "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-    },
-    "extensions": [
-        "camel-karavan.karavan",
-        "redhat.vscode-apache-camel"
-    ]
+  "name": "Try Weik.io",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    // The platform's images are built for Intel and AMD processors. On Apple silicon Docker runs them emulated.
+    "options": ["--platform=linux/amd64"]
+  },
+  // The image's own start script sets the platform up and runs it, under a small init that reaps finished processes.
+  "overrideCommand": false,
+  "init": true,
+  // The agent stops the running integrations before the container stops.
+  "runArgs": ["--stop-timeout=60", "--platform=linux/amd64"],
+  "remoteUser": "weikio",
+  "updateRemoteUserUID": true,
+  // The installation (its keys, documents, logs and the build cache) is kept in a volume, so it survives a rebuild.
+  "mounts": [
+    { "type": "volume", "source": "try-weikio-data-${devcontainerId}", "target": "/home/weikio/.weikio-dev" }
+  ],
+  "containerEnv": { "WEIKIO_KEYRING": "off" },
+  // The terminals and the start command use UTF-8, which the weikio client draws its robot head in. The platform's own
+  // processes run without it, as in the product's images.
+  "remoteEnv": { "LANG": "C.UTF-8" },
+  // The admin UI and the API. The platform knows itself as http://localhost:8580, so the port must stay 8580 on your
+  // machine too. If 8580 is taken there, free it and reopen the container.
+  "forwardPorts": [8580],
+  "portsAttributes": {
+    "8580": { "label": "Weik.io admin UI and API", "requireLocalPort": true, "onAutoForward": "notify" }
+  },
+  "otherPortsAttributes": { "onAutoForward": "ignore" },
+  // Waits until the platform is ready, signs the weikio client in and shows what to try.
+  "postStartCommand": "weikio-dev wait --login",
+  "hostRequirements": { "cpus": 4, "memory": "8gb", "storage": "20gb" },
+  "customizations": {
+    "vscode": {
+      "extensions": ["redhat.vscode-apache-camel", "camel-karavan.karavan", "redhat.vscode-yaml"],
+      "settings": { "terminal.integrated.defaultProfile.linux": "bash" }
+    }
+  }
 }

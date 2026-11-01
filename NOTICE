@@ -1,0 +1,63 @@
+Weik.io
+Copyright 2023-2027 Adafy Oy
+
+Weik.io is licensed under the Apache License, Version 2.0, in the file LICENSE.
+Source: https://github.com/weikio
+
+The container images weikio/weikio-backend, weikio/weikio-apim, weikio/weikio-agent and weikio/weikio-forwarder hold
+this file as /NOTICE and the file LICENSE as /LICENSE. They also contain software written by others, each under its own
+licence. /THIRD-PARTY-NOTICES.txt in each image lists every component of others that image contains: the NuGet packages
+its programs are built from, its base image's packages and, where the image holds them, the npm packages of the admin
+UI, the Java runtime, the libraries inside each Camel launcher and the Go modules rclone and the OpenTelemetry collector
+are built from. Each entry names the component's licence and copies the licence and notice files the component ships in
+full, and the end of the file holds the standard text of every licence an entry names. /licenses/components.tsv in each
+image lists the same components, one per line, and /licenses/ in the weikio-backend and weikio-agent images also holds
+the licence texts that came with the Java runtime and rclone.
+
+Source code offer (GNU General Public License version 2, section 3)
+
+The weikio-backend and weikio-agent images contain an OpenJDK runtime (Eclipse Temurin), licensed under the GNU
+General Public License version 2 with the Classpath Exception, and every image contains Ubuntu packages, some of which
+are licensed under the GNU General Public License. Their source code is published by their projects: the runtime at
+https://github.com/adoptium/jdk21u under the tag of the version /THIRD-PARTY-NOTICES.txt names, and each Ubuntu package
+in the Ubuntu archive under the version the image's package database records. For three years after an image is
+published, Adafy Oy will also give anyone who asks a complete machine-readable copy of the corresponding source code
+of those components, for no more than the cost of making and sending the copy. Ask through https://weik.io and name
+the image and its digest.
+
+The admin UI that weikio-backend serves contains elkjs, which lays out Mermaid diagrams, under the Eclipse Public
+License 2.0. Its source code is published at https://github.com/kieler/elkjs under the version
+/THIRD-PARTY-NOTICES.txt names.
+
+The Camel launchers in weikio-backend contain libraries under the Eclipse Public License 1.0 and 2.0, the Mozilla Public
+License 2.0 and the Common Public License 1.0. The source code of each is published on Maven Central as the sources jar
+of the version /THIRD-PARTY-NOTICES.txt names, and the entry of each gives the address of that jar.
+
+rclone, in weikio-backend and weikio-agent, is built from Go modules, among them modules under the Mozilla Public
+License 2.0 and one under the GNU Lesser General Public License version 3. The source code of each module is published
+at the Go module proxy, https://proxy.golang.org, under the version /THIRD-PARTY-NOTICES.txt names, and the entry of
+each gives its address. rclone's own source code is published at https://github.com/rclone/rclone under the tag of the
+version /THIRD-PARTY-NOTICES.txt names.
+
+The OpenTelemetry collector in weikio-forwarder, /otelcol-contrib, is built from Go modules, among them modules under
+the Mozilla Public License 2.0. The source code of each module is published at the Go module proxy under the version
+/THIRD-PARTY-NOTICES.txt names, and the entry of each gives its address. The collector's own source code is published
+at https://github.com/open-telemetry/opentelemetry-collector-contrib under the tag of the version
+/THIRD-PARTY-NOTICES.txt names.
+
+The Try Weik.io image that this repository's Dockerfile builds holds this file, LICENSE and the same lists of
+everything it holds: what the weikio-backend image it is built from holds, the programs of the weikio-agent and
+weikio-apim images, the Weik.io CLI, and nats-server and the VictoriaLogs, VictoriaMetrics and VictoriaTraces
+programs, each with the Go modules it is built from. The source code of each module is published at the Go module
+proxy under the version /THIRD-PARTY-NOTICES.txt names. The programs' own source code is published at
+https://github.com/nats-io/nats-server and under https://github.com/VictoriaMetrics under the tag of the version
+/THIRD-PARTY-NOTICES.txt names.
+
+The repository's tests/fidelity/corpus/ holds Camel routes and their test files copied from Apache Camel JBang Examples
+(https://github.com/apache/camel-jbang-examples) and Apache Camel Kamelets (https://github.com/apache/camel-kamelets),
+both licensed under the Apache License, Version 2.0, in the file LICENSE. tests/fidelity/README.md names the commit and
+the tag they were copied from, the copied files keep the licence headers they carry, and no image contains them. The
+NOTICE of Apache Camel Kamelets reads:
+
+    This product includes software developed by
+    The Apache Software Foundation (http://www.apache.org/).

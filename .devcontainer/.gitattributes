@@ -1,0 +1,2 @@
+# The container's scripts and its Dockerfile run on Linux, so a checkout on Windows keeps their line endings.
+* text eol=lf

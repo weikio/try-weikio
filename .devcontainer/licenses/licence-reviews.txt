@@ -1,0 +1,177 @@
+# The licence of each component whose own files name none, name one third-party-notices.sh does not
+# recognise, or name several to choose from, as read for that exact version. Another version needs a line of its own.
+# Six fields separated by tabs: the part that lists the component, its name and version as the notices list them, its
+# licence as an SPDX expression ('-' where its own files name it), the address of its source code where the part cannot
+# derive one ('-' otherwise), and what the review read.
+npm	khroma	2.1.0	MIT	-	its package.json names no licence, and its license file is the MIT licence
+launcher	automaton	1.11-8	BSD-3-Clause	-	the pom of dk.brics.automaton:automaton:1.11-8 on Maven Central names BSD, and the project's COPYING is the three-clause BSD licence
+launcher	btf	1.3	Apache-2.0	-	the pom of com.github.java-json-tools:btf:1.3 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	ci-environment	12.0.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:ci-environment:12.0.0, on Maven Central names MIT License
+launcher	context	2.4.47	EPL-2.0	-	the pom of eu.maveniverse.maven.mima:mima:2.4.47, a parent of eu.maveniverse.maven.mima:context:2.4.47, on Maven Central names EPL-2.0
+launcher	cucumber-core	7.34.3	MIT	-	the pom of io.cucumber:cucumber-parent:4.6.0, a parent of io.cucumber:cucumber-core:7.34.3, on Maven Central names MIT License
+launcher	cucumber-gherkin	7.34.3	MIT	-	the pom of io.cucumber:cucumber-parent:4.6.0, a parent of io.cucumber:cucumber-gherkin:7.34.3, on Maven Central names MIT License
+launcher	cucumber-gherkin-messages	7.34.3	MIT	-	the pom of io.cucumber:cucumber-parent:4.6.0, a parent of io.cucumber:cucumber-gherkin-messages:7.34.3, on Maven Central names MIT License
+launcher	cucumber-java	7.34.3	MIT	-	the pom of io.cucumber:cucumber-parent:4.6.0, a parent of io.cucumber:cucumber-java:7.34.3, on Maven Central names MIT License
+launcher	cucumber-json-formatter	0.3.2	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:cucumber-json-formatter:0.3.2, on Maven Central names MIT License
+launcher	cucumber-plugin	7.34.3	MIT	-	the pom of io.cucumber:cucumber-parent:4.6.0, a parent of io.cucumber:cucumber-plugin:7.34.3, on Maven Central names MIT License
+launcher	datatable	7.34.3	MIT	-	the pom of io.cucumber:cucumber-parent:4.6.0, a parent of io.cucumber:datatable:7.34.3, on Maven Central names MIT License
+launcher	docstring	7.34.3	MIT	-	the pom of io.cucumber:cucumber-parent:4.6.0, a parent of io.cucumber:docstring:7.34.3, on Maven Central names MIT License
+launcher	embedded-maven	2.4.47	EPL-2.0	-	the pom of eu.maveniverse.maven.mima:mima:2.4.47, a parent of eu.maveniverse.maven.mima.runtime:embedded-maven:2.4.47, on Maven Central names EPL-2.0
+launcher	hamcrest	2.1	BSD-3-Clause	-	the pom of org.hamcrest:hamcrest:2.1 on Maven Central names BSD Licence 3
+launcher	handlebars-jackson2	4.3.1	Apache-2.0	-	the pom of com.github.jknack:handlebars.java:4.3.1, a parent of com.github.jknack:handlebars-jackson2:4.3.1, on Maven Central names The Apache Software License, Version 2.0
+launcher	html-formatter	22.3.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:html-formatter:22.3.0, on Maven Central names MIT License
+launcher	jackson-coreutils	2.0	Apache-2.0	-	the pom of com.github.java-json-tools:jackson-coreutils:2.0 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	jackson-coreutils-equivalence	1.0	Apache-2.0	-	the pom of com.github.java-json-tools:jackson-coreutils-equivalence:1.0 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	jakarta.annotation-api	3.0.0	EPL-2.0	-	its pom offers EPL 2.0 or GPL2 w/ CPE; the notices take EPL-2.0
+launcher	jakarta.servlet-api	6.1.0	EPL-2.0	-	its pom offers EPL 2.0 or GPL2 w/ CPE; the notices take EPL-2.0
+launcher	javapoet	0.18.0	Apache-2.0	-	the pom of com.palantir.javapoet:javapoet:0.18.0 on Maven Central names The Apache License, Version 2.0
+launcher	javax.inject	1	Apache-2.0	-	the pom of javax.inject:javax.inject:1 on Maven Central names The Apache Software License, Version 2.0
+launcher	jna	5.12.1	Apache-2.0	-	the pom of net.java.dev.jna:jna:5.12.1 on Maven Central offers LGPL-2.1-or-later or Apache-2.0; the notices take Apache-2.0
+launcher	jolokia-agent-jvm	2.5.0-javaagent	Apache-2.0	-	the pom of org.jolokia:jolokia-parent:2.5.0, a parent of org.jolokia:jolokia-agent-jvm:2.5.0, on Maven Central names Apache License, Version 2.0
+launcher	jolokia-agent-jvm	2.6.0	Apache-2.0	-	the pom of org.jolokia:jolokia-parent:2.6.0, a parent of org.jolokia:jolokia-agent-jvm:2.6.0, on Maven Central names Apache License, Version 2.0
+launcher	json-patch	1.13	Apache-2.0	-	the pom of com.github.java-json-tools:json-patch:1.13 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	json-path	3.0.0	Apache-2.0	-	the pom of com.jayway.jsonpath:json-path:3.0.0 on Maven Central names The Apache Software License, Version 2.0
+launcher	json-schema-core	1.2.14	Apache-2.0	-	the pom of com.github.java-json-tools:json-schema-core:1.2.14 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	json-schema-validator	2.2.14	Apache-2.0	-	the pom of com.github.java-json-tools:json-schema-validator:2.2.14 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	jsonschema-generator	4.38.0	Apache-2.0	-	the pom of com.github.victools:jsonschema-generator-parent:4.38.0, a parent of com.github.victools:jsonschema-generator:4.38.0, on Maven Central names The Apache License, Version 2.0
+launcher	jsonschema-module-jackson	4.38.0	Apache-2.0	-	the pom of com.github.victools:jsonschema-generator-parent:4.38.0, a parent of com.github.victools:jsonschema-module-jackson:4.38.0, on Maven Central names The Apache License, Version 2.0
+launcher	jtidy	r938	HTMLTIDY	-	its pom names the Java HTML Tidy License, and its META-INF/LICENSE.txt is the HTML Tidy licence with the authors of JTidy added
+launcher	junit	4.13.2	-	https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of junit:junit:4.13.2 on Maven Central names Eclipse Public License 1.0
+launcher	junit-jupiter-api	6.1.2	-	https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/6.1.2/junit-jupiter-api-6.1.2-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of org.junit.jupiter:junit-jupiter-api:6.1.2 on Maven Central names Eclipse Public License v2.0
+launcher	junit-jupiter-engine	6.1.2	-	https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/6.1.2/junit-jupiter-engine-6.1.2-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of org.junit.jupiter:junit-jupiter-engine:6.1.2 on Maven Central names Eclipse Public License v2.0
+launcher	junit-platform-commons	6.1.2	-	https://repo1.maven.org/maven2/org/junit/platform/junit-platform-commons/6.1.2/junit-platform-commons-6.1.2-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of org.junit.platform:junit-platform-commons:6.1.2 on Maven Central names Eclipse Public License v2.0
+launcher	junit-platform-engine	6.1.2	-	https://repo1.maven.org/maven2/org/junit/platform/junit-platform-engine/6.1.2/junit-platform-engine-6.1.2-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of org.junit.platform:junit-platform-engine:6.1.2 on Maven Central names Eclipse Public License v2.0
+launcher	junit-platform-launcher	6.1.2	-	https://repo1.maven.org/maven2/org/junit/platform/junit-platform-launcher/6.1.2/junit-platform-launcher-6.1.2-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of org.junit.platform:junit-platform-launcher:6.1.2 on Maven Central names Eclipse Public License v2.0
+launcher	junit-xml-formatter	0.11.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:junit-xml-formatter:0.11.0, on Maven Central names MIT License
+launcher	kubernetes-client	7.5.2	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.5.2, a parent of io.fabric8:kubernetes-client:7.5.2, on Maven Central names Apache License, Version 2.0
+launcher	kubernetes-client	7.8.0	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.8.0, a parent of io.fabric8:kubernetes-client:7.8.0, on Maven Central names Apache License, Version 2.0
+launcher	kubernetes-client-api	7.5.2	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.5.2, a parent of io.fabric8:kubernetes-client-api:7.5.2, on Maven Central names Apache License, Version 2.0
+launcher	kubernetes-client-api	7.8.0	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.8.0, a parent of io.fabric8:kubernetes-client-api:7.8.0, on Maven Central names Apache License, Version 2.0
+launcher	kubernetes-httpclient-vertx	7.5.2	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.5.2, a parent of io.fabric8:kubernetes-httpclient-vertx:7.5.2, on Maven Central names Apache License, Version 2.0
+launcher	kubernetes-httpclient-vertx	7.8.0	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.8.0, a parent of io.fabric8:kubernetes-httpclient-vertx:7.8.0, on Maven Central names Apache License, Version 2.0
+launcher	listenablefuture	9999.0-empty-to-avoid-conflict-with-guava	Apache-2.0	-	the pom of com.google.guava:guava-parent:26.0-android, a parent of com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava, on Maven Central names The Apache Software License, Version 2.0
+launcher	lombok	1.18.38	MIT AND BSD-3-Clause	-	its LICENSE is the MIT licence, followed by the BSD-3-Clause licence of the ASM classes and the MIT licences of the other components it includes
+launcher	msg-simple	1.2	Apache-2.0	-	the pom of com.github.java-json-tools:msg-simple:1.2 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	openapi-generator	7.19.0	Apache-2.0	-	the pom of org.openapitools:openapi-generator-project:7.19.0, a parent of org.openapitools:openapi-generator:7.19.0, on Maven Central names Apache License 2.0
+launcher	openapi-generator	7.24.0	Apache-2.0	-	the pom of org.openapitools:openapi-generator-project:7.24.0, a parent of org.openapitools:openapi-generator:7.24.0, on Maven Central names Apache License 2.0
+launcher	openapi-generator-core	7.19.0	Apache-2.0	-	the pom of org.openapitools:openapi-generator-project:7.19.0, a parent of org.openapitools:openapi-generator-core:7.19.0, on Maven Central names Apache License 2.0
+launcher	openapi-generator-core	7.24.0	Apache-2.0	-	the pom of org.openapitools:openapi-generator-project:7.24.0, a parent of org.openapitools:openapi-generator-core:7.24.0, on Maven Central names Apache License 2.0
+launcher	openshift-client	7.5.2	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.5.2, a parent of io.fabric8:openshift-client:7.5.2, on Maven Central names Apache License, Version 2.0
+launcher	openshift-client	7.8.0	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.8.0, a parent of io.fabric8:openshift-client:7.8.0, on Maven Central names Apache License, Version 2.0
+launcher	openshift-client-api	7.5.2	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.5.2, a parent of io.fabric8:openshift-client-api:7.5.2, on Maven Central names Apache License, Version 2.0
+launcher	openshift-client-api	7.8.0	Apache-2.0	-	the pom of io.fabric8:kubernetes-client-project:7.8.0, a parent of io.fabric8:openshift-client-api:7.8.0, on Maven Central names Apache License, Version 2.0
+launcher	picocli	4.7.7	Apache-2.0	-	the pom of info.picocli:picocli:4.7.7 on Maven Central names The Apache Software License, version 2.0
+launcher	picocli-shell-jline3	4.7.7	Apache-2.0	-	the pom of info.picocli:picocli-shell-jline3:4.7.7 on Maven Central names The Apache Software License, version 2.0
+launcher	plexus-cipher	2.1.0	Apache-2.0	-	the pom of org.codehaus.plexus:plexus:15, a parent of org.codehaus.plexus:plexus-cipher:2.1.0, on Maven Central names Apache License, Version 2.0
+launcher	plexus-sec-dispatcher	2.0	Apache-2.0	-	the pom of org.codehaus.plexus:plexus:8, a parent of org.codehaus.plexus:plexus-sec-dispatcher:2.0, on Maven Central names Apache License, Version 2.0
+launcher	pretty-formatter	2.4.1	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:pretty-formatter:2.4.1, on Maven Central names MIT License
+launcher	query	14.7.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:query:14.7.0, on Maven Central names MIT License
+launcher	rhino	1.7.15.1	-	https://repo1.maven.org/maven2/org/mozilla/rhino/1.7.15.1/rhino-1.7.15.1-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of org.mozilla:rhino:1.7.15.1 on Maven Central names Mozilla Public License, Version 2.0
+launcher	rhino	1.7.7.2	-	https://repo1.maven.org/maven2/org/mozilla/rhino/1.7.7.2/rhino-1.7.7.2-sources.jar	its own licence file names its licence; it has no pom.properties, and the pom of org.mozilla:rhino:1.7.7.2 on Maven Central names Mozilla Public License, Version 2.0
+launcher	slf4j-ext	1.7.36	MIT	-	the pom of org.slf4j:slf4j-parent:1.7.36, a parent of org.slf4j:slf4j-ext:1.7.36, on Maven Central names MIT License
+launcher	spring-xml	5.0.2	Apache-2.0	-	the pom of org.springframework.ws:spring-xml:5.0.2 on Maven Central names The Apache License, Version 2.0
+launcher	standalone-shared	2.4.47	EPL-2.0	-	the pom of eu.maveniverse.maven.mima:mima:2.4.47, a parent of eu.maveniverse.maven.mima.runtime:standalone-shared:2.4.47, on Maven Central names EPL-2.0
+launcher	standalone-static	2.4.47	EPL-2.0	-	the pom of eu.maveniverse.maven.mima:mima:2.4.47, a parent of eu.maveniverse.maven.mima.runtime:standalone-static:2.4.47, on Maven Central names EPL-2.0
+launcher	swagger-compat-spec-parser	1.0.75	Apache-2.0	-	the pom of io.swagger:swagger-parser-project:1.0.75, a parent of io.swagger:swagger-compat-spec-parser:1.0.75, on Maven Central names Apache License 2.0
+launcher	swagger-compat-spec-parser	1.0.76	Apache-2.0	-	the pom of io.swagger:swagger-parser-project:1.0.76, a parent of io.swagger:swagger-compat-spec-parser:1.0.76, on Maven Central names Apache License 2.0
+launcher	swagger-parser	1.0.75	Apache-2.0	-	the pom of io.swagger:swagger-parser-project:1.0.75, a parent of io.swagger:swagger-parser:1.0.75, on Maven Central names Apache License 2.0
+launcher	swagger-parser	1.0.76	Apache-2.0	-	the pom of io.swagger:swagger-parser-project:1.0.76, a parent of io.swagger:swagger-parser:1.0.76, on Maven Central names Apache License 2.0
+launcher	swagger-parser	2.1.37	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.37, a parent of io.swagger.parser.v3:swagger-parser:2.1.37, on Maven Central names Apache License 2.0
+launcher	swagger-parser	2.1.45	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.45, a parent of io.swagger.parser.v3:swagger-parser:2.1.45, on Maven Central names Apache License 2.0
+launcher	swagger-parser-core	2.1.37	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.37, a parent of io.swagger.parser.v3:swagger-parser-core:2.1.37, on Maven Central names Apache License 2.0
+launcher	swagger-parser-core	2.1.45	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.45, a parent of io.swagger.parser.v3:swagger-parser-core:2.1.45, on Maven Central names Apache License 2.0
+launcher	swagger-parser-safe-url-resolver	1.0.75	Apache-2.0	-	the pom of io.swagger:swagger-parser-project:1.0.75, a parent of io.swagger:swagger-parser-safe-url-resolver:1.0.75, on Maven Central names Apache License 2.0
+launcher	swagger-parser-safe-url-resolver	1.0.76	Apache-2.0	-	the pom of io.swagger:swagger-parser-project:1.0.76, a parent of io.swagger:swagger-parser-safe-url-resolver:1.0.76, on Maven Central names Apache License 2.0
+launcher	swagger-parser-safe-url-resolver	2.1.37	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.37, a parent of io.swagger.parser.v3:swagger-parser-safe-url-resolver:2.1.37, on Maven Central names Apache License 2.0
+launcher	swagger-parser-safe-url-resolver	2.1.45	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.45, a parent of io.swagger.parser.v3:swagger-parser-safe-url-resolver:2.1.45, on Maven Central names Apache License 2.0
+launcher	swagger-parser-v2-converter	2.1.37	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.37, a parent of io.swagger.parser.v3:swagger-parser-v2-converter:2.1.37, on Maven Central names Apache License 2.0
+launcher	swagger-parser-v2-converter	2.1.45	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.45, a parent of io.swagger.parser.v3:swagger-parser-v2-converter:2.1.45, on Maven Central names Apache License 2.0
+launcher	swagger-parser-v3	2.1.37	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.37, a parent of io.swagger.parser.v3:swagger-parser-v3:2.1.37, on Maven Central names Apache License 2.0
+launcher	swagger-parser-v3	2.1.45	Apache-2.0	-	the pom of io.swagger.parser.v3:swagger-parser-project:2.1.45, a parent of io.swagger.parser.v3:swagger-parser-v3:2.1.45, on Maven Central names Apache License 2.0
+launcher	tag-expressions	8.1.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:tag-expressions:8.1.0, on Maven Central names MIT License
+launcher	tamboui-aesh-backend	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-aesh-backend:0.4.0 on Maven Central names MIT License
+launcher	tamboui-annotations	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-annotations:0.4.0 on Maven Central names MIT License
+launcher	tamboui-core	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-core:0.4.0 on Maven Central names MIT License
+launcher	tamboui-css	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-css:0.4.0 on Maven Central names MIT License
+launcher	tamboui-image	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-image:0.4.0 on Maven Central names MIT License
+launcher	tamboui-jline3-backend	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-jline3-backend:0.4.0 on Maven Central names MIT License
+launcher	tamboui-markdown	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-markdown:0.4.0 on Maven Central names MIT License
+launcher	tamboui-tui	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-tui:0.4.0 on Maven Central names MIT License
+launcher	tamboui-widgets	0.4.0	MIT	-	the pom of dev.tamboui:tamboui-widgets:0.4.0 on Maven Central names MIT License
+launcher	teamcity-formatter	0.2.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:teamcity-formatter:0.2.0, on Maven Central names MIT License
+launcher	testng-xml-formatter	0.7.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.5.0, a parent of io.cucumber:testng-xml-formatter:0.7.0, on Maven Central names MIT License
+launcher	uri-template	0.10	Apache-2.0	-	the pom of com.github.java-json-tools:uri-template:0.10 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
+launcher	usage-formatter	0.1.0	MIT	-	the pom of io.cucumber:cucumber-parent:4.4.0, a parent of io.cucumber:usage-formatter:0.1.0, on Maven Central names MIT License
+launcher	vertx-auth-common	4.5.24	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-auth-common:4.5.24, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-auth-common	4.5.28	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-auth-common:4.5.28, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-auth-jwt	4.5.26	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-auth-jwt:4.5.26, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-auth-jwt	4.5.34	Apache-2.0	-	the pom of io.vertx:vertx-parent:23, a parent of io.vertx:vertx-auth-jwt:4.5.34, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-auth-properties	4.5.26	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-auth-properties:4.5.26, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-auth-properties	4.5.34	Apache-2.0	-	the pom of io.vertx:vertx-parent:23, a parent of io.vertx:vertx-auth-properties:4.5.34, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-bridge-common	4.5.26	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-bridge-common:4.5.26, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-bridge-common	4.5.34	Apache-2.0	-	the pom of io.vertx:vertx-parent:23, a parent of io.vertx:vertx-bridge-common:4.5.34, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-core	4.5.24	Apache-2.0	-	the pom of io.vertx:vertx-core:4.5.24 on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 2.0; the notices take Apache-2.0
+launcher	vertx-core	4.5.28	Apache-2.0	-	the pom of io.vertx:vertx-core:4.5.28 on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 2.0; the notices take Apache-2.0
+launcher	vertx-web	4.5.26	Apache-2.0	-	the pom of io.vertx:vertx-web:4.5.26 on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 2.0; the notices take Apache-2.0
+launcher	vertx-web	4.5.34	Apache-2.0	-	the pom of io.vertx:vertx-web:4.5.34 on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 2.0; the notices take Apache-2.0
+launcher	vertx-web-client	4.5.24	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-web-client:4.5.24, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-web-client	4.5.28	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-web-client:4.5.28, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-web-common	4.5.24	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-web-common:4.5.24, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	vertx-web-common	4.5.28	Apache-2.0	-	the pom of io.vertx:vertx-parent:22, a parent of io.vertx:vertx-web-common:4.5.28, on Maven Central offers The Apache Software License, Version 2.0 or Eclipse Public License - v 1.0; the notices take Apache-2.0
+launcher	wsdl4j	1.6.3	CPL-1.0	https://repo1.maven.org/maven2/wsdl4j/wsdl4j/1.6.3/wsdl4j-1.6.3-sources.jar	the pom of wsdl4j:wsdl4j:1.6.3 on Maven Central names CPL
+launcher	xml-apis	1.4.01	Apache-2.0 AND SAX-PD AND W3C	-	the pom of xml-apis:xml-apis:1.4.01 on Maven Central names The Apache Software License, Version 2.0, The SAX License, The W3C License, one for each part of the jar
+go	bazil.org/fuse	v0.0.0-20230120002735-62a210ff1fd5	BSD-3-Clause AND BSD-2-Clause AND LicenseRef-9pfuse	-	its LICENSE is the BSD-3-Clause licence, followed by the notice of Plan 9 from User Space's 9pfuse, which fuse.go adapts, and the BSD-2-Clause licence of FUSE's fuse_kernel.h
+go	bitbucket.org/atlassian/go-asap/v2	v2.24.3	Apache-2.0	-	its module holds no licence file; the LICENSE.txt at the root of its repository, bitbucket.org/atlassian/go-asap, is the Apache-2.0 licence of Atlassian
+go	github.com/aws/aws-lambda-go	v1.55.0	Apache-2.0 AND MIT-0	-	its LICENSE is the Apache-2.0 licence, and its LICENSE-SUMMARY gives the Lambda functions the MIT No Attribution licence of its LICENSE-LAMBDACODE
+go	github.com/buengese/sgzip	v0.1.1	MIT AND BSD-3-Clause	-	its LICENSE is the MIT licence and its GO_LICENSE the BSD-3-Clause licence of the Go code it copies
+go	github.com/calebcase/tmpfile	v1.0.3	MIT AND BSD-3-Clause	-	its LICENSE is the MIT licence and its LICENSE.golang the BSD-3-Clause licence of the Go code it copies
+go	github.com/cloudflare/circl	v1.6.4	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence of Cloudflare, followed by the BSD-3-Clause licence of the Go code it copies
+go	github.com/cloudsoda/sddl	v0.0.0-20250224235906-926454e91efc	LGPL-3.0-only	-	its LICENSE is the GNU Lesser General Public License version 3, while its README says MIT; the notices take the licence file
+go	github.com/cronokirby/saferith	v0.33.1-0.20250226174546-1f11f94ce488	MIT AND BSD-3-Clause	-	its LICENSE is the MIT licence and its LICENSE_go the BSD-3-Clause licence of the Go code it copies
+go	github.com/cyphar/filepath-securejoin	v0.6.1	BSD-3-Clause AND MPL-2.0	-	its COPYING.md names BSD-3-Clause AND MPL-2.0, the licences of its LICENSE.BSD and LICENSE.MPL-2.0
+go	github.com/DataDog/datadog-api-client-go/v2	v2.64.0	Apache-2.0	-	its LICENSE is the Apache-2.0 licence, and its LICENSE-3rdparty.csv lists the licences of the modules it depends on, which have entries of their own
+go	github.com/DataDog/sketches-go	v1.4.8	Apache-2.0	-	its LICENSE is the Apache-2.0 licence, and its LICENSE-3rdparty.csv lists the licences of two modules its tests use
+go	github.com/dgryski/go-metro	v0.0.0-20250106013310-edb8663e5e33	MIT	-	its LICENSE is the MIT licence, after a note that the code translates the reference C++ code of MetroHash
+go	github.com/digitalocean/godo	v1.201.0	MIT AND BSD-3-Clause	-	its LICENSE.txt is the MIT licence, followed by the BSD-3-Clause licence of the go-github code it copies
+go	github.com/emirpasic/gods	v1.18.1	BSD-2-Clause AND ISC	-	its LICENSE is the BSD-2-Clause licence, followed by the ISC licence of its AVL tree code
+go	github.com/flynn/noise	v1.1.0	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence after a trademark line
+go	github.com/gogo/protobuf	v1.3.2	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence after the names of the projects it derives from
+go	github.com/google/cadvisor	v0.57.0	Apache-2.0	-	its LICENSE is the Apache-2.0 licence, with the cAdvisor authors' copyright line before it
+go	github.com/gophercloud/gophercloud/v2	v2.13.0	Apache-2.0	-	its LICENSE is the Apache-2.0 licence, with Rackspace's and the Gophercloud authors' copyright lines before it
+go	github.com/gosnmp/gosnmp	v1.44.0	BSD-2-Clause AND BSD-3-Clause	-	its LICENSE is the BSD-2-Clause licence of the GoSNMP authors, followed by the BSD-3-Clause licence of the Go code it copies
+go	github.com/jmespath/go-jmespath	v0.4.0	Apache-2.0	-	its LICENSE is the short notice of the Apache-2.0 licence
+go	github.com/klauspost/compress	v1.18.6	BSD-3-Clause AND Apache-2.0 AND MIT	-	its LICENSE is the BSD-3-Clause licence, the Apache-2.0 licence of gzhttp, the MIT licence of readahead and filepathx and the BSD-3-Clause licence of snappy
+go	github.com/klauspost/compress	v1.19.0	BSD-3-Clause AND Apache-2.0 AND MIT	-	its LICENSE is the BSD-3-Clause licence, the Apache-2.0 licence of gzhttp, the MIT licence of readahead and filepathx and the BSD-3-Clause licence of snappy
+go	github.com/klauspost/compress	v1.19.1	BSD-3-Clause AND Apache-2.0 AND MIT	-	its LICENSE is the BSD-3-Clause licence, the Apache-2.0 licence of gzhttp, the MIT licence of readahead and filepathx and the BSD-3-Clause licence of snappy
+go	github.com/klauspost/compress	v1.19.2	BSD-3-Clause AND Apache-2.0 AND MIT	-	its LICENSE is the BSD-3-Clause licence, the Apache-2.0 licence of gzhttp, the MIT licence of readahead and filepathx and the BSD-3-Clause licence of snappy
+go	github.com/klauspost/compress	v1.20.0	BSD-3-Clause AND Apache-2.0 AND MIT	-	its LICENSE is the BSD-3-Clause licence, the Apache-2.0 licence of gzhttp, the MIT licence of readahead and filepathx and the BSD-3-Clause licence of snappy
+go	github.com/klauspost/pgzip	v1.2.6	MIT AND BSD-3-Clause	-	its LICENSE is the MIT licence and its GO_LICENSE the BSD-3-Clause licence of the Go code it copies
+go	github.com/opencontainers/go-digest	v1.0.0	Apache-2.0	-	its LICENSE is the Apache-2.0 licence of the code; its LICENSE.docs, the CC-BY-SA-4.0 licence, covers its documentation, which the program does not hold
+go	github.com/oracle/oci-go-sdk/v65	v65.121.0	Apache-2.0	-	its LICENSE.txt offers the Universal Permissive License 1.0 or Apache-2.0; the notices take Apache-2.0
+go	github.com/oracle/oci-go-sdk/v65	v65.121.1	Apache-2.0	-	its LICENSE.txt offers the Universal Permissive License 1.0 or Apache-2.0; the notices take Apache-2.0
+go	github.com/pmezard/go-difflib	v1.0.1-0.20181226105442-5d4384ee4fb2	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence without the numbers of its clauses
+go	github.com/russross/blackfriday/v2	v2.1.0	BSD-2-Clause	-	its LICENSE.txt is the BSD-2-Clause licence, quoted as Markdown
+go	github.com/shirou/gopsutil/v3	v3.24.5	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence, followed by the BSD-3-Clause licence of the Go code it copies
+go	github.com/shirou/gopsutil/v4	v4.26.6	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence, followed by the BSD-3-Clause licence of the Go code it copies
+go	github.com/shirou/gopsutil/v4	v4.26.8	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence, followed by the BSD-3-Clause licence of the Go code it copies
+go	github.com/shopspring/decimal	v1.4.0	MIT	-	its LICENSE is the MIT licence, followed by the MIT licence of fpd, the fixed-point decimal code it is based on
+go	github.com/Showmax/go-fqdn	v1.0.0	Apache-2.0	-	its LICENSE is the short notice of the Apache-2.0 licence
+go	github.com/sorairolake/lzip-go	v0.3.8	Apache-2.0 OR MIT	-	its LICENSE-APACHE and LICENSE-MIT offer either licence
+go	github.com/tinylib/msgp	v1.6.4	MIT AND BSD-3-Clause	-	its LICENSE is the MIT licence and names portions copyright The Go Authors under the Go licence, BSD-3-Clause
+go	github.com/twmb/murmur3	v1.1.8	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence of Sébastien Paolacci, followed by the BSD-3-Clause licence of Travis Bischel
+go	github.com/ua-parser/uap-go	v0.0.0-20251207011819-db9adb27a0b8	Apache-2.0	-	its LICENSE is the short notice of the Apache-2.0 licence
+go	github.com/ulikunitz/xz	v0.5.15	BSD-3-Clause	-	its LICENSE is the BSD-3-Clause licence
+go	github.com/vmware/go-vmware-nsxt	v0.0.0-20230223012718-d31b8a1ca05e	BSD-2-Clause	-	its LICENSE.txt is the BSD-2-Clause licence of VMware
+go	github.com/willscott/go-nfs-client	v0.0.0-20251022144359-801f10d98886	BSD-2-Clause	-	its LICENSE_BSD-2.txt is the BSD-2-Clause licence of VMware
+go	go.elastic.co/fastjson	v1.5.1	Apache-2.0 AND MIT	-	its LICENSE is the Apache-2.0 licence, followed by the MIT licence of the easyjson code it copies
+go	go.yaml.in/yaml/v2	v2.4.4	Apache-2.0 AND MIT	-	its LICENSE is the Apache-2.0 licence and its LICENSE.libyaml the MIT licence of the files ported from libyaml
+go	go.yaml.in/yaml/v3	v3.0.4	MIT AND Apache-2.0	-	its LICENSE gives the MIT licence for the files ported from libyaml and the Apache-2.0 licence for the rest
+go	go.yaml.in/yaml/v3	v3.0.5	MIT AND Apache-2.0	-	its LICENSE gives the MIT licence for the files ported from libyaml and the Apache-2.0 licence for the rest
+go	gopkg.in/yaml.v2	v2.4.0	Apache-2.0 AND MIT	-	its LICENSE is the Apache-2.0 licence and its LICENSE.libyaml the MIT licence of the files ported from libyaml
+go	gopkg.in/yaml.v3	v3.0.1	MIT AND Apache-2.0	-	its LICENSE gives the MIT licence for the files ported from libyaml and the Apache-2.0 licence for the rest
+go	modernc.org/libc	v1.74.4	BSD-3-Clause AND MIT AND BSD-2-Clause	-	its LICENSE is the BSD-3-Clause licence, and its LICENSE-3RD-PARTY.md gives the Go code BSD-3-Clause, musl, go-netdb and nixpkgs the MIT licence and musl's regular expressions BSD-2-Clause
+go	modernc.org/memory	v1.11.0	BSD-3-Clause	-	its LICENSE, LICENSE-GO and LICENSE-MMAP-GO are the BSD-3-Clause licence; its LICENSE-LOGO names the source of a logo the program does not hold
+go	modernc.org/sqlite	v1.57.0	BSD-3-Clause AND MIT AND LicenseRef-sqlite-public-domain	-	its LICENSE is the BSD-3-Clause licence, its LICENSE-SQLITE_VEC the MIT licence of sqlite-vec, and its LICENSE-SQLITE the public domain dedication of SQLite, copied under the entry
+go	moul.io/http2curl/v2	v2.3.0	Apache-2.0 OR MIT	-	its LICENSE-APACHE and LICENSE-MIT offer either licence
+go	sigs.k8s.io/yaml	v1.6.0	MIT AND BSD-3-Clause AND Apache-2.0	-	its LICENSE is the MIT licence, the BSD-3-Clause licence of the Go code it copies, and the MIT and Apache-2.0 licences of the go-yaml code it forks
+go	storj.io/infectious	v0.0.2	BSD-2-Clause AND MIT	-	its LICENSE gives the BSD-2-Clause licence for the portions labelled so and the MIT licence for the rest

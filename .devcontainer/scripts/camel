@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Camel's command line, run from the Camel launcher jars the platform's builder uses, one per Camel line the platform
+# builds on. 'weikio dev run' names the line with --camel-version. Without it, the platform's default line runs. The
+# launcher of a line runs that line alone and refuses the option, so the option picks the jar and is not passed on.
+set -euo pipefail
+
+launchers=/usr/share/weikio/launchers
+version="$(sed -n 's/^CAMEL_VERSION=//p' /usr/local/share/weikio-dev/release)"
+arguments=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --camel-version=*) version="${1#--camel-version=}" ;;
+        --camel-version) version="${2-}"; shift ;;
+        *) arguments+=("$1") ;;
+    esac
+    shift
+done
+
+jar="$launchers/camel-launcher-$version.jar"
+if [ ! -f "$jar" ]; then
+    echo "camel: this container has no Camel $version; it runs Camel $(ls "$launchers" | sed -n 's/^camel-launcher-\(.*\)\.jar$/\1/p' | paste -sd ' ' | sed 's/ / and /g')." >&2
+    exit 2
+fi
+exec java -jar "$jar" "${arguments[@]}"
