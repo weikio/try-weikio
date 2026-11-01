@@ -8,7 +8,7 @@ This repository opens in a development container that runs all of Weik.io on you
 
 - Docker: Docker Engine on Linux, or Docker Desktop on Windows or macOS. Give Docker 8 GB of memory (6 GB at least), 4 CPUs and 20 GB of free disk.
 - Visual Studio Code with the Dev Containers extension, or the `devcontainer` command line (`npm install -g @devcontainers/cli`).
-- Internet access for the first build of the container, which downloads the platform's images from Docker Hub, the Weik.io CLI from weik.io, Ubuntu packages and the Go modules the image's licence notices list. The first build of an integration and the first local run fetch Camel's libraries from Maven Central. Later runs use the copies kept in the container.
+- Internet access for the first build of the container, which downloads the platform's images from Docker Hub, the `weikio` CLI from weik.io, Ubuntu packages and the Go modules the image's licence notices list. The first build of an integration and the first local run fetch Camel's libraries from Maven Central. Later runs use the copies kept in the container.
 
 The platform's images are built for Intel and AMD processors. On a Mac with Apple silicon, Docker runs them emulated, which is slower.
 

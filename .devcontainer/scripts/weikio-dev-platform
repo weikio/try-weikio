@@ -203,7 +203,7 @@ setup_keys() {
 }
 
 # The hub's configuration is init's, with its listeners on 127.0.0.1, its data in the volume and the WebSocket listener
-# (for sites behind a TLS terminator) left out.
+# (for agents behind a TLS terminator) left out.
 hub_conf() {
     sed -e 's|^listen: 0\.0\.0\.0:4222$|listen: 127.0.0.1:4222|' \
         -e 's|^\(  listen: \)0\.0\.0\.0:7422$|\1127.0.0.1:7422|' \
@@ -220,7 +220,7 @@ hub_conf() {
     ln -sfn "$D/keys/nats" "$D/hub/keys"
 }
 
-# The site leaf's configuration is the configuration init wrote for the dev agent, listening on 127.0.0.1:4223 (the hub has 4222)
+# The leaf node's configuration is the configuration init wrote for the dev agent, listening on 127.0.0.1:4223 (the hub has 4222)
 # and reading the credential from the hub folder of the agent's home, where the agent rewrites it after a re-issue.
 leaf_conf() {
     sed -e 's|^listen: 0\.0\.0\.0:4222$|listen: 127.0.0.1:4223|' \

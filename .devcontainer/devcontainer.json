@@ -19,7 +19,7 @@
     { "type": "volume", "source": "try-weikio-data-${devcontainerId}", "target": "/home/weikio/.weikio-dev" }
   ],
   "containerEnv": { "WEIKIO_KEYRING": "off" },
-  // The terminals and the start command use UTF-8, which the weikio client draws its robot head in. The platform's own
+  // The terminals and the start command use UTF-8, which the Weik.io CLI draws its robot head in. The platform's own
   // processes run without it, as in the product's images.
   "remoteEnv": { "LANG": "C.UTF-8" },
   // The admin UI and the API. The platform knows itself as http://localhost:8580, so the port must stay 8580 on your
@@ -29,7 +29,7 @@
     "8580": { "label": "Weik.io admin UI and API", "requireLocalPort": true, "onAutoForward": "notify" }
   },
   "otherPortsAttributes": { "onAutoForward": "ignore" },
-  // Waits until the platform is ready, signs the weikio client in and shows what to try.
+  // Waits until the platform is ready, signs the Weik.io CLI in and shows what to try.
   "postStartCommand": "weikio-dev wait --login",
   "hostRequirements": { "cpus": 4, "memory": "8gb", "storage": "20gb" },
   "customizations": {

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The Try Weik.io container's helper: follows the platform's start, signs the weikio client in, and shows, reads and
+# The Try Weik.io container's helper: follows the platform's start, signs the Weik.io CLI in, and shows, reads and
 # resets the platform that runs in this container.
 set -uo pipefail
 
@@ -30,7 +30,7 @@ EOF
 step() { cat "$STATE/step" 2>/dev/null || echo "not started"; }
 
 # An error or a warning on standard error: its sentence after the label, then each fix as a lead-in and a command under
-# it, indented as the weikio client indents them.
+# it, indented as the Weik.io CLI indents them.
 problem() {
     local label="$1" sentence="$2" indent
     shift 2
@@ -54,7 +54,7 @@ seconds_of() {
 
 welcome() {
     echo
-    # On a terminal the client draws its robot head waking up, and the welcome's lines follow it. Elsewhere it prints nothing.
+    # On a terminal the CLI draws its robot head waking up, and the welcome's lines follow it. Elsewhere it prints nothing.
     weikio version --welcome
     cat <<EOF
 Weik.io $WEIKIO_VERSION is running in this container.
@@ -92,7 +92,7 @@ login() {
         problem error "The platform has no admin key yet, because it is still being set up." "Follow its start with:" "weikio-dev wait"
         return 1
     fi
-    # The key is handed to the client in its environment, never on a command line.
+    # The key is handed to the CLI in its environment, never on a command line.
     (
         flock 8
         WEIKIO_API_KEY="$key" weikio login "$BASE_URL" --name local --project sandbox --env devtest > "$RUN/login.out" 2>&1
@@ -106,7 +106,7 @@ login() {
     echo "The Weik.io CLI is signed in to $BASE_URL as the platform admin, in context local."
 }
 
-# Warns when the client was compiled from another release than the platform's.
+# Warns when the CLI was compiled from another release than the platform's.
 version_check() {
     local client server lines
     lines="$(weikio version 2>/dev/null)"

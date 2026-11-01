@@ -19,7 +19,7 @@ The image this folder's Dockerfile builds holds the same files as the Weik.io im
 - `/licenses/README.md`: this file.
 
 The notices also list the programs the image copies in from the other images: the agent's and the gateway's NuGet
-packages, the Weik.io CLI's, and nats-server and the VictoriaLogs, VictoriaMetrics and VictoriaTraces programs with every
+packages, the `weikio` CLI's, and nats-server and the VictoriaLogs, VictoriaMetrics and VictoriaTraces programs with every
 Go module each is built from.
 
 ## This folder
@@ -27,7 +27,7 @@ Go module each is built from.
 - `LICENSE` and `NOTICE`: the files the image holds at `/LICENSE` and `/NOTICE`.
 - `notices.sh` and `third-party-notices.sh`: the Dockerfile's `notices` stage writes the image's notices with them, from
   the files the image holds.
-- `cli.txt` and `cli.tsv`: the NuGet packages of the release's Weik.io CLI, read from the deps.json of its build, because
+- `cli.txt` and `cli.tsv`: the NuGet packages of the release's `weikio` CLI, read from the deps.json of its build, because
   the image takes the CLI as the published file.
 - `licence-reviews.txt`: the licence of each component whose own files don't name one, by exact version.
 - `texts/`: the standard text of each licence the notices name, one file per SPDX id, copied unchanged from the SPDX
