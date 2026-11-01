@@ -23,7 +23,7 @@ function containerOf(folder) {
     try {
         lines = execFileSync('docker', ['ps', '--format', '{{.ID}} {{.Label "devcontainer.local_folder"}}'], { encoding: 'utf8' });
     } catch {
-        fail('Docker did not answer. Start Docker and run this again.');
+        fail("Docker didn't answer. Start Docker and run this again.");
     }
     const wanted = folder.toLowerCase();
     for (const line of lines.split('\n')) {
