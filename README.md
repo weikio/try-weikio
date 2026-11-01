@@ -127,4 +127,5 @@ Everything runs on plain HTTP inside the container and listens only on the conta
 - Docs: https://weik.io/docs
 - University: https://weik.io/university
 - Weik.io Cloud: https://weikio.cloud
-- GitHub: https://github.com/weikio
+- Live demo: https://demo.weik.io
+- GitHub: https://github.com/weikio/weikio

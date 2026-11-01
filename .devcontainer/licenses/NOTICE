@@ -53,11 +53,10 @@ proxy under the version /THIRD-PARTY-NOTICES.txt names. The programs' own source
 https://github.com/nats-io/nats-server and under https://github.com/VictoriaMetrics under the tag of the version
 /THIRD-PARTY-NOTICES.txt names.
 
-The repository's tests/fidelity/corpus/ holds Camel routes and their test files copied from Apache Camel JBang Examples
+The source of Weik.io holds Camel routes and their test files copied from Apache Camel JBang Examples
 (https://github.com/apache/camel-jbang-examples) and Apache Camel Kamelets (https://github.com/apache/camel-kamelets),
-both licensed under the Apache License, Version 2.0, in the file LICENSE. tests/fidelity/README.md names the commit and
-the tag they were copied from, the copied files keep the licence headers they carry, and no image contains them. The
-NOTICE of Apache Camel Kamelets reads:
+both licensed under the Apache License, Version 2.0, in the file LICENSE. The copied files keep the licence headers they
+carry, and no image contains them. The NOTICE of Apache Camel Kamelets reads:
 
     This product includes software developed by
     The Apache Software Foundation (http://www.apache.org/).
