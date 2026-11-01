@@ -114,7 +114,7 @@ weikio-dev reset           remove the installation and set up a new one, which l
 
 The installation is kept in a Docker volume, so it survives a restart and a rebuild of the container. Removing the volume, or `weikio-dev reset`, starts from nothing.
 
-Everything runs on plain HTTP inside the container and listens only on the container's own loopback address. The platform admin's API key is kept in the container's data volume, readable only by the container's user. This setup is for trying Weik.io on your own machine, and a server installation is described in https://weik.io/docs/operate/install-single-server.
+Everything runs on plain HTTP inside the container and listens only on the container's own loopback address. The platform admin's API key is kept in the container's data volume, readable only by the container's user. This setup is for trying Weik.io on your own machine, and installing on a server is described in https://weik.io/docs/operate/install-single-server.
 
 ## Next
 
