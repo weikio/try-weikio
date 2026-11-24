@@ -21,7 +21,8 @@
 # go-modules prints the module@version of every module a Go program is built from, for 'go mod download'. texts reads
 # the list form and writes the standard text of every licence it names. A component whose own files name no licence,
 # name one the script does not recognise, or name several to choose from takes the licence its line in
-# licence-reviews.txt gives by part, name and version. The standard texts are texts/<SPDX id>.txt.
+# licence-reviews.txt gives by part, name and version, and a Go module built from other source than the module proxy
+# serves takes the source address its line gives. The standard texts are texts/<SPDX id>.txt.
 # Both are read from the folder the script is in, or from the folder NOTICES_ROOT names, which holds the same paths.
 set -eu
 
@@ -657,7 +658,7 @@ escaped() {
 
 go_part() {
     [ $# -eq 3 ] || usage
-    local program=$1 list=$2 cache=$3 path version sum folder dir hash own licence files where
+    local program=$1 list=$2 cache=$3 path version sum folder dir hash own licence files where reviewed_source
     [ -d "$cache" ] || fail "The module cache '$cache' does not exist. Download the modules with 'go mod download' into it first."
     work=$(mktemp -d)
     trap 'rm -rf "$work"' EXIT
@@ -695,7 +696,14 @@ go_part() {
         echo "$path $version"
         echo "  Licence: $licence$(if [ "$where" = entry ]; then echo ", its own files are below"; else echo ", whose text is at the end of this file"; fi)"
         licence_source go "$path" "$version" "$licence" "$own" "its licence files"
-        echo "  Source: https://proxy.golang.org/$(escaped "$path")/@v/$(escaped "$version").zip${sum:+, checksum $sum}"
+        # A module the program's build took from other source than the module proxy serves, such as a release's source
+        # archive, takes that source's address from its reviewed line.
+        reviewed_source=$(review go "$path" "$version" | cut -f 2)
+        if [ -n "$reviewed_source" ] && [ "$reviewed_source" != "-" ]; then
+            echo "  Source: $reviewed_source, the source code of this version"
+        else
+            echo "  Source: https://proxy.golang.org/$(escaped "$path")/@v/$(escaped "$version").zip${sum:+, checksum $sum}"
+        fi
         [ "$folder" = - ] || echo "  Built from: the folder $folder of the program's own source, in place of this version"
         printf '%s\n' "$files" | while read -r f; do
             [ -z "$f" ] || in_full "$dir/$f" "$f"

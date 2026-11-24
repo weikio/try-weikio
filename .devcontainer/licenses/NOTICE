@@ -1,5 +1,5 @@
 Weik.io
-Copyright 2023-2027 Adafy Oy
+Copyright 2023-2026 Adafy Oy
 
 Weik.io is licensed under the Apache License, Version 2.0, in the file LICENSE.
 Source: https://github.com/weikio
@@ -21,10 +21,11 @@ The weikio-backend and weikio-agent images contain an OpenJDK runtime (Eclipse T
 General Public License version 2 with the Classpath Exception, and every image contains Ubuntu packages, some of which
 are licensed under the GNU General Public License. Their source code is published by their projects: the runtime at
 https://github.com/adoptium/jdk21u under the tag of the version /THIRD-PARTY-NOTICES.txt names, and each Ubuntu package
-in the Ubuntu archive under the version the image's package database records. For three years after an image is
-published, Adafy Oy will also give anyone who asks a complete machine-readable copy of the corresponding source code
-of those components, for no more than the cost of making and sending the copy. Ask through https://weik.io and name
-the image and its digest.
+in the Ubuntu archive under the version the image's package database records. The weikio-apim, weikio-agent and
+weikio-forwarder images contain the eBPF programs of go.opentelemetry.io/obi named below, whose source code is
+published in the archive named there. For three years after an image is published, Adafy Oy will also give anyone who
+asks a complete machine-readable copy of the corresponding source code of those components, for no more than the cost
+of making and sending the copy. Ask through https://weik.io and name the image and its digest.
 
 The admin UI that weikio-backend serves contains elkjs, which lays out Mermaid diagrams, under the Eclipse Public
 License 2.0. Its source code is published at https://github.com/kieler/elkjs under the version
@@ -40,10 +41,18 @@ at the Go module proxy, https://proxy.golang.org, under the version /THIRD-PARTY
 each gives its address. rclone's own source code is published at https://github.com/rclone/rclone under the tag of the
 version /THIRD-PARTY-NOTICES.txt names.
 
-The OpenTelemetry collector in weikio-forwarder, /otelcol-contrib, is built from Go modules, among them modules under
-the Mozilla Public License 2.0. The source code of each module is published at the Go module proxy under the version
-/THIRD-PARTY-NOTICES.txt names, and the entry of each gives its address. The collector's own source code is published
-at https://github.com/open-telemetry/opentelemetry-collector-contrib under the tag of the version
+The OpenTelemetry collector in weikio-apim, weikio-agent and weikio-forwarder, /otelcol-contrib, is the program the
+OpenTelemetry project publishes as otel/opentelemetry-collector-contrib, unchanged. It is built from Go modules, among
+them modules under the Mozilla Public License 2.0. The source code of each module is published at the Go module proxy
+under the version /THIRD-PARTY-NOTICES.txt names, and the entry of each gives its address, except
+go.opentelemetry.io/obi, which the collector's build takes from the source archive obi-v0.12.2-source-generated.tar.gz
+of that version's release at
+https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.12.2/obi-v0.12.2-source-generated.tar.gz,
+because that archive holds the compiled eBPF programs the collector embeds. Those programs are built with headers
+licensed under the BSD 2-Clause License or, at the recipient's choice, the GNU General Public License version 2 or the
+GNU Lesser General Public License version 2.1, and the texts are copied under the module's entry. The collector's own
+source code is published at https://github.com/open-telemetry/opentelemetry-collector-releases and its components' at
+https://github.com/open-telemetry/opentelemetry-collector-contrib, both under the tag of the version
 /THIRD-PARTY-NOTICES.txt names.
 
 The VictoriaLogs, VictoriaMetrics and VictoriaTraces programs in weikio-logstore, weikio-metricstore and

@@ -2,7 +2,7 @@
 # recognise, or name several to choose from, as read for that exact version. Another version needs a line of its own.
 # Six fields separated by tabs: the part that lists the component, its name and version as the notices list them, its
 # licence as an SPDX expression ('-' where its own files name it), the address of its source code where the part cannot
-# derive one ('-' otherwise), and what the review read.
+# derive one or the program was built from other source than the part derives ('-' otherwise), and what the review read.
 npm	khroma	2.1.0	MIT	-	its package.json names no licence, and its license file is the MIT licence
 launcher	automaton	1.11-8	BSD-3-Clause	-	the pom of dk.brics.automaton:automaton:1.11-8 on Maven Central names BSD, and the project's COPYING is the three-clause BSD licence
 launcher	btf	1.3	Apache-2.0	-	the pom of com.github.java-json-tools:btf:1.3 on Maven Central offers Lesser General Public License, version 3 or greater or Apache Software License, version 2.0; the notices take Apache-2.0
@@ -164,6 +164,7 @@ go	github.com/ulikunitz/xz	v0.5.15	BSD-3-Clause	-	its LICENSE is the BSD-3-Claus
 go	github.com/vmware/go-vmware-nsxt	v0.0.0-20230223012718-d31b8a1ca05e	BSD-2-Clause	-	its LICENSE.txt is the BSD-2-Clause licence of VMware
 go	github.com/willscott/go-nfs-client	v0.0.0-20251022144359-801f10d98886	BSD-2-Clause	-	its LICENSE_BSD-2.txt is the BSD-2-Clause licence of VMware
 go	go.elastic.co/fastjson	v1.5.1	Apache-2.0 AND MIT	-	its LICENSE is the Apache-2.0 licence, followed by the MIT licence of the easyjson code it copies
+go	go.opentelemetry.io/obi	v0.12.2	-	https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.12.2/obi-v0.12.2-source-generated.tar.gz	built into otelcol-contrib 0.160.0, whose build replaces the module with the folder that scripts/prepare-obi.sh of opentelemetry-collector-releases v0.160.0 unpacks from this archive, sha256 48613984dd7b395d124dfdb525e37443eb7e93b12964a638163464621179184d as the release's SHA256SUMS gives it; the archive holds the 13 compiled eBPF objects the collector embeds, which the module at the proxy does not; its LICENSE is the Apache-2.0 licence, every .c file under bpf/ reads Apache-2.0, and the six headers in bpf/bpfcore/ the objects are built with read LGPL-2.1 OR BSD-2-Clause or GPL-2.0-only OR BSD-2-Clause, and the entry copies their LICENSE.BSD-2-Clause, LICENSE.GPL-2.0-only and LICENSE.LGPL-2.1 in full; for a lawyer when one is next engaged: the license section of the net and netsk objects reads GPL, and bpf/logenricher/path_resolver.h, marked Apache-2.0, is adapted from PathResolver.h of elastic/ebpf, which reads GPL-2.0-only OR BSD-2-Clause
 go	go.yaml.in/yaml/v2	v2.4.4	Apache-2.0 AND MIT	-	its LICENSE is the Apache-2.0 licence and its LICENSE.libyaml the MIT licence of the files ported from libyaml
 go	go.yaml.in/yaml/v3	v3.0.4	MIT AND Apache-2.0	-	its LICENSE gives the MIT licence for the files ported from libyaml and the Apache-2.0 licence for the rest
 go	go.yaml.in/yaml/v3	v3.0.5	MIT AND Apache-2.0	-	its LICENSE gives the MIT licence for the files ported from libyaml and the Apache-2.0 licence for the rest
